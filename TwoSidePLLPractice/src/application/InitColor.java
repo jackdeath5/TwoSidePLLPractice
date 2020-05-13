@@ -21,7 +21,8 @@ public class InitColor extends HBox {
 		private GraphicsContext disPen;
 
 		public InitColor(String name, int r, int g, int b) {
-			nameLabel = new Label(name + " Face:  "); //Set name of label, with a space between it and the next part
+			nameLabel = new Label(name + " Face:"); //Set name of label, with a space between it and the next part
+			nameLabel.setMinWidth(75);
 			colorDisp = new Canvas(25,25); //Used to display the colors
 			disPen = colorDisp.getGraphicsContext2D();
 			redtf = new TextField("" + r);

@@ -46,12 +46,18 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Scanner;
 
 //Commented out imports were done so because they weren't used
 
@@ -667,8 +673,9 @@ public class TwoSidePLLPractice extends Application{
 		difficultyList = new String[] {"Simple","Full"}; //Difficulty selection list
 		difficultyBox = new ComboBox<String>(FXCollections.observableArrayList(difficultyList)); //Selection for difficulty
 		difficultyBox.getSelectionModel().selectFirst(); //Set Simple as default
-		difficulties = new HBox(new Label("Difficulty: "),difficultyBox);
+		difficulties = new HBox(new Label("    Difficulty:"),difficultyBox);
 		difficulties.setAlignment(Pos.CENTER);
+		difficulties.setSpacing(5);
 
 		countBox = new TextField("10"); //Set count of times for PLL Guessing -> 10 is default
 		countBox.textProperty().addListener((ov, old_val, new_val) -> {
@@ -693,7 +700,7 @@ public class TwoSidePLLPractice extends Application{
 		initYellow = new InitColor("Yellow",212,197,0);
 
 		startBox = new HBox(); //Used to center the start button
-		startBox.setAlignment(Pos.CENTER); //Centers this VBox
+		startBox.setAlignment(Pos.CENTER); //Centers this HBox
 		startBox.setSpacing(50);
 		startButton = new Button("Start"); //This will be clicked to start the program
 		caseSelectButton = new Button("Select Cases");
@@ -704,7 +711,7 @@ public class TwoSidePLLPractice extends Application{
 		//Title
 		Label title = new Label("2-Side PLL Recognition Practice");
 		title.setFont(Font.font("Verdana", FontWeight.BOLD, 18)); //Makes the font bigger and bolded
-		Label author = new Label("Created by Jackdeathshard5");
+		Label author = new Label("Created by JackDeath5");
 		author.setFont(Font.font("Verdana", FontPosture.ITALIC, 11)); //make the text small and italicized
 		VBox titleBox = new VBox(title, author, new Label()); //Empty label used as a simple spacer
 		titleBox.setAlignment(Pos.CENTER); //Center things in the titlebox
@@ -1359,6 +1366,26 @@ public class TwoSidePLLPractice extends Application{
 	    SessionsDesc2.setTextFill(Color.rgb(175, 175, 175)); //sets the text light gray
 	    SessionsDesc3.setFont(Font.font("Verdana", FontPosture.ITALIC, 8));
 	    SessionsDesc3.setTextFill(Color.rgb(175, 175, 175)); //sets the text light gray
+	    
+		Button saveSession = new Button("Save as...");
+		saveSession.setOnAction(e -> {
+			try {
+				writeSessionToFile(simpCols, fullCols, "test");
+			} catch (IOException e1) {
+				System.out.println("Unable to save file.");
+			}
+		});
+		Button loadSession = new Button("Open File...");
+		loadSession.setOnAction(e -> {
+			try {
+				readSessionFromFile("test");
+			} catch (FileNotFoundException e1) {
+				System.out.println("Unable to load file.");
+			}
+		});
+		HBox sessionIOBox = new HBox(saveSession, loadSession);
+		sessionIOBox.setAlignment(Pos.CENTER); //Centers the elements inside the HBox
+		sessionIOBox.setSpacing(195); //Spaces the 2 buttons apart
 
 	    sessions = new VBox();
 	    HBox sessionsBox = new HBox();
@@ -1368,13 +1395,13 @@ public class TwoSidePLLPractice extends Application{
 	    sessionsBox.getChildren().addAll(SButton,sessionDisplayLabel,CICSButton);
 
 	    sessions.setAlignment(Pos.CENTER);
-	    sessions.getChildren().addAll(sessionsTitle,sessionsBox,sp2,SessionsDesc,SessionsDesc2,SessionsDesc3,new Label(),mainMenu); //new label used as simple spacer
+	    sessions.getChildren().addAll(sessionsTitle,sessionIOBox,sessionsBox,sp2,SessionsDesc,SessionsDesc2,SessionsDesc3,new Label(),mainMenu); //new label used as simple spacer
 
 	    simpSButton.setOnAction( e -> {
-	    	sessions.getChildren().setAll(sessionsTitle,sessionsBox,sp2,SessionsDesc,SessionsDesc2,SessionsDesc3,new Label(),mainMenu);
+	    	sessions.getChildren().setAll(sessionsTitle,sessionIOBox,sessionsBox,sp2,SessionsDesc,SessionsDesc2,SessionsDesc3,new Label(),mainMenu);
 	    });
 	    fullSButton.setOnAction( e -> {
-	    	sessions.getChildren().setAll(sessionsTitle,sessionsBox,sp3,SessionsDesc,SessionsDesc2,SessionsDesc3,new Label(),mainMenu);
+	    	sessions.getChildren().setAll(sessionsTitle,sessionIOBox,sessionsBox,sp3,SessionsDesc,SessionsDesc2,SessionsDesc3,new Label(),mainMenu);
 	    });
 
 	    SButton.setOnAction( e -> {
@@ -1382,13 +1409,13 @@ public class TwoSidePLLPractice extends Application{
 	    		sessionShowSwitch.set(false);
 	    		sessionDisplayLabel.setText("Simple Statistics");
 	    		SButton.setText("Show Full Stats");
-	    		sessions.getChildren().setAll(sessionsTitle,sessionsBox,sp2,SessionsDesc,SessionsDesc2,SessionsDesc3,new Label(),mainMenu);
+	    		sessions.getChildren().setAll(sessionsTitle,sessionIOBox,sessionsBox,sp2,SessionsDesc,SessionsDesc2,SessionsDesc3,new Label(),mainMenu);
 	    	}
 	    	else { //If false, should be showing Simple
 	    		sessionShowSwitch.set(true);
 	    		sessionDisplayLabel.setText("Full Statistics");
 	    		SButton.setText("Show Simple Stats");
-	    		sessions.getChildren().setAll(sessionsTitle,sessionsBox,sp3,SessionsDesc,SessionsDesc2,SessionsDesc3,new Label(),mainMenu);
+	    		sessions.getChildren().setAll(sessionsTitle,sessionIOBox,sessionsBox,sp3,SessionsDesc,SessionsDesc2,SessionsDesc3,new Label(),mainMenu);
 	    	}
 	    });
 	    CICSButton.setOnAction( e -> {
@@ -3176,10 +3203,72 @@ public class TwoSidePLLPractice extends Application{
 
 		public void setTimes(ArrayList<Double> a) {times = a;}
 		public void setWrongGuesses(ArrayList<String> a) {wrongGuesses = a;}
-
+		
+		/**
+		 * Returns the cell and data in the format:
+		 * *fullPermName
+		 * -totalGuesses, totalCorrectGuesses
+		 * -time1,time2,timeN...
+		 * -wrongGuess1,wrongGuess2,wrongGuessN...
+		 * 
+		 * @return returns the sessionStats in the specified String format.
+		 */
+		@Override
+		public String toString() {
+			String outString = "*" + fullPermName + 
+					"\n-" + questionsNUM + "," + correctNUM +
+					"\n-";
+			for(int i = 0; i < times.size(); i++) {
+				outString += times.get(i);
+				if(i < times.size() - 1) {
+					outString += ",";
+				}
+			}
+			outString += "\n-";
+			for(int i = 0; i < wrongGuesses.size(); i++) {
+				outString += wrongGuesses.get(i);
+				if(i < wrongGuesses.size() - 1) {
+					outString += ",";
+				}
+			}
+//			outString +="\n"; //Maybe remove? using this so that next text will be on the next line.
+			return outString;
+		}
 	}
 
 ///////////////////////////////////////////////////////////////
+	
+	public void writeSessionToFile(SessionEntry[] simpleStats, SessionEntry[] fullStats, String fileName) throws IOException {
+//		PrintStream fileWriter = new PrintStream(new File(fileName));
+		
+		//SAVE COLORS OF CUBE FIRST
+		
+		for(int i = 0; i < simpCols.length; i++) {
+			System.out.println(simpCols[i].toString());
+//			fileWriter.println(simpCols[i].toString());
+		}
+		for(int i = 0; i < fullCols.length; i++) {
+			System.out.println(fullCols[i].toString());
+//			fileWriter.println(simpCols[i].toString());
+		}
+		
+//		fileWriter.close();
+	}
+	
+	//Will write them automatically if correct. Doesn't return anything.
+	public void readSessionFromFile(String fileName) throws FileNotFoundException {
+//		Scanner fileReader = new Scanner(new FileInputStream(fileName));
+//		SessionEntry[] simpEntries = new SessionEntry[88]; //22 cases * 4 side orientations of each
+//		SessionEntry[] fullEntries = new SessionEntry[88]; 
+//		while (fileReader.hasNextLine()) {
+//			try {
+//				
+//			}
+//		}
+	}
+		
+		
+	
 
 ////////////////////////////////////////////////////////////////////////
 	public static void main(String[] args) {launch(args);}
