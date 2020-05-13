@@ -117,13 +117,11 @@ public class TwoSidePLLPractice extends Application{
 	private ArrayList<Double> TimeHist;//Record the TIME - time it took to analyze the PLL
 	private double prevTime; //The previous time - used to calculate the time it took to do each PLL
 	private int totalCorrect; //The number of PLLs guessed correctly - Used to calculate accuracy
-//	ArrayList<Boolean> CheckHist;//Check the guess - RECORD IF RIGHT OR WRONG -DEPRECATED DUE TO MOVING CHECK INTO
 
 	//Menu Stuffs
 	private MenuBar mb;
 
 	private Menu debug;
-//	private MenuItem cubeRefreshMenu; - Deprecated
 	private MenuItem crossRefreshMenu;
 	private MenuItem PLLRefreshMenu;
 	private MenuItem caseRefreshMenu;
@@ -564,8 +562,6 @@ public class TwoSidePLLPractice extends Application{
 
 		//debug menu
 		debug = new Menu("Debug");
-//		cubeRefreshMenu = new MenuItem("Refresh Sides");
-//		crossRefreshMenu = new MenuItem("Refresh Sides w/ Cross");
 		crossRefreshMenu = new MenuItem("Refresh Sides");
 		PLLRefreshMenu = new MenuItem("New PLL");
 		caseRefreshMenu = new MenuItem("New Case");
@@ -658,13 +654,11 @@ public class TwoSidePLLPractice extends Application{
 		//VBOX WITH HBOXES
 		modesList = new String[] {"Normal","Debug"}; //Modes List
 		modeBox = new ComboBox<String>(FXCollections.observableArrayList(modesList)); //Selection for mode
-		//modeBox.getSelectionModel().select(<index>); //SET THE DEFAULT VALUE FOR THE COMBOBOX
 		modeBox.getSelectionModel().selectFirst(); //Set Normal as default
 		modes = new HBox(new Label("Select Mode: "),modeBox); // HBox for the mode selection
 		modes.setAlignment(Pos.CENTER);
 
 		crossList = new String[] {"Color Neutral","White","Red","Blue","Green","Orange","Yellow"}; //List of Cross Colors
-		//MAYBE MAKE A MULTIPLE COLOR SELECTION????
 		crossBox = new ComboBox<String>(FXCollections.observableArrayList(crossList)); //Selection for Cross
 		crossBox.getSelectionModel().selectFirst(); //Set Color Neutral as default
 		cross = new HBox(new Label("Select Cross Color: "),crossBox); //HBox for cross selection
@@ -1068,8 +1062,6 @@ public class TwoSidePLLPractice extends Application{
 	    checkCol.setStyle("-fx-alignment: CENTER;");
 
 	    //Make Table
-//        statTable.getColumns().addAll(numCol,timestampCol,drawCol,nameCol,guessCol,timeCol,checkCol); //Add columns to table - done later
-//        statTable.setItems(data); //Add data to table - done later when data after data collection
 	    statTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	    setupTable();
 	    sp = new ScrollPane(statTable); //A scroll pane for the table to go into
@@ -1425,11 +1417,6 @@ public class TwoSidePLLPractice extends Application{
 		//	Debug Menu					//
 		//////////////////////////////////
 
-//			cubeRefreshMenu.setOnAction( e -> { //Deprecated -> only crossRefreshMenu is used now
-//				newColors();
-//				//refreshPLL();
-//				refresh();
-//			});
 			crossRefreshMenu.setOnAction( e -> { //Resets Colors
 				if(crossBox.getValue().equals("White")) {crossColor = white;}
 				else if(crossBox.getValue().equals("Red")) {crossColor = red;}
@@ -1474,16 +1461,6 @@ public class TwoSidePLLPractice extends Application{
 				bp.setCenter(initial); //set the Initial screen as the current setup
 			});
 
-//			MenuItem testMenuItem = new MenuItem("Clear Canvas");
-//			canvasTest.setOnAction( e -> {
-//				 cubePen.clearRect(0,0,cubeCanvasLength,cubeCanvasWidth);
-//			}); //put test thing here. Make sure to add to add this back to the debug menu
-
-//			crossRefreshMenu.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN));
-//			PLLRefreshMenu.setAccelerator(new KeyCodeCombination(KeyCode.P, KeyCombination.CONTROL_DOWN));
-//			caseRefreshMenu.setAccelerator(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_DOWN));
-
-//			debug.getItems().addAll(cubeRefreshMenu,crossRefreshMenu,PLLRefreshMenu,startTimerMenu,stopTimerMenu,getTimeMenu,incGuessNumMenu,returnToInitial);
 			debug.getItems().addAll(crossRefreshMenu,PLLRefreshMenu,caseRefreshMenu,startTimerMenu,stopTimerMenu,getTimeMenu,incGuessNumMenu,returnToInitial);
 
 			mb.getMenus().add(debug);
@@ -1494,32 +1471,26 @@ public class TwoSidePLLPractice extends Application{
 		//////////////////////////////////
 
 			whiteMenu.setOnHidden( e -> {
-				//white = whiteMenu.getColor();
 				updateColors();
 				refresh();
 			});
 			redMenu.setOnHidden( e -> {
-				//red = redMenu.getColor();
 				updateColors();
 				refresh();
 			});
 			blueMenu.setOnHidden( e -> {
-				//blue = blueMenu.getColor();
 				updateColors();
 				refresh();
 			});
 			greenMenu.setOnHidden( e -> {
-				//green = greenMenu.getColor();
 				updateColors();
 				refresh();
 			});
 			orangeMenu.setOnHidden( e -> {
-				//orange = orangeMenu.getColor();
 				updateColors();
 				refresh();
 			});
 			yellowMenu.setOnHidden( e -> {
-				//yellow = yellowMenu.getColor();
 				updateColors();
 				refresh();
 			});
@@ -1536,10 +1507,10 @@ public class TwoSidePLLPractice extends Application{
 //			createGuessButtons(); //Problems with using it once here
 
 			//Button Action Setup
-//			simple.setSelected(true); //Defaults to Simple
-
+			
+			  //defaults to simple
+			
 			simple.setOnAction( e -> {
-				//System.out.println("Test"); //Runs if selected OR deselected
 				//Inverted to account for change when clicked activated
 				if(simple.isSelected()) { //Run if simple is NOT selected
 						System.out.println("Changed difficulty to Simple");
@@ -1549,7 +1520,7 @@ public class TwoSidePLLPractice extends Application{
 						difficultyValue = 0; //Change the difficulty
 						activePLLname = activePLLname.substring(0,1);
 					}
-				else {/* Does nothing because it's already selected */}//System.out.println("Test2");} //Check to make sure nothing happens if it is selected while being selected
+				else {/* Does nothing because it's already selected */}
 
 				simple.setSelected(true); //set check on simple
 				full.setSelected(false); //Remove check from full
@@ -1561,12 +1532,11 @@ public class TwoSidePLLPractice extends Application{
 						System.out.println("Changed difficulty to Full");
 						master.getChildren().remove(simpleGP);
 						master.getChildren().add(fullGP);
-//						bp.setTop(testbox); //IT WORKS!!!
 						//Put difficulty toggle right here
 						difficultyValue = 1; //Change the mode
 						activePLLname = PLLname[PLLnum/4]; //Update the active PLL name
 					}
-				else {/* Does nothing because it's already selected */}//System.out.println("Test4");} //Check to make sure nothing happens if it is selected while being selected
+				else {/* Does nothing because it's already selected */}
 
 				full.setSelected(true); //set check on simple
 				simple.setSelected(false); //Remove check from full
@@ -1596,14 +1566,8 @@ public class TwoSidePLLPractice extends Application{
 				else if(crossBox.getValue().equals("Color Neutral")) {crossColor = Color.rgb(0, 0, 0, 0.0);} //INVISIBLE COLOR IF COLOR NEUTAL
 				//Actually Set the new Colors
 
-//				for(Color c: faceColors) {System.out.println(c);}
-//				updateColors();
-
 				if(crossColor.equals(Color.rgb(0, 0, 0, 0.0))) {newColors();} //If color neutral
 				else {newColors(crossColor);} //If certain cross
-
-//				System.out.println("IN BETWEEN");
-//				for(Color c: faceColors) {System.out.println(c);}
 
 				//FOR EACH SetCaseBox IN THE ARRAY, REDRAW(NEW FACECOLORS);
 				for(SetCaseBox b: caseSelectArray) {b.redrawCase(faceColors);}
@@ -1674,10 +1638,6 @@ public class TwoSidePLLPractice extends Application{
 		rubiksCube.add(left);
 		rubiksCube.add(right);
 		rubiksCube.add(top);
-
-//		newColors();
-//		refreshPLL();
-//		refresh();
 
 	} //END OF INIT
 
@@ -1761,18 +1721,6 @@ public class TwoSidePLLPractice extends Application{
 				Y,
 				Z
 		)); //End of adding different cases to the scrollpane
-
-		// \/ These dont work for some reason
-//		//Expand all button
-//		Button expandButton = new Button("Expand All");
-//		expandButton.setOnAction( e -> {
-//			for(TitledPane tp: TPs) {tp.setExpanded(true);} //expands all titledpanes
-//		});
-//		//Retract all button
-//		Button retractButton = new Button("Retract All");
-//		expandButton.setOnAction( e -> {
-//			for(TitledPane tp: TPs) {tp.setExpanded(false);} //retracts all titledpanes
-//		});
 
 		//Setup the HBox with the buttons
 		HBox buttonsBox = new HBox(allButton,noneButton);//,expandButton,retractButton); //Creates the HBox
@@ -1987,7 +1935,6 @@ public class TwoSidePLLPractice extends Application{
 	//Will randomly assign colors to faceColors arraylist - if Color Neutral
 	public void newColors() {
 		ArrayList<Color> tempColors = new ArrayList<Color>(Arrays.asList(colors));
-	//	System.out.println(Arrays.asList(colors));
 		int c1N = rand.nextInt(6); //Gets the index for the first color
 		Color c1 = tempColors.get(c1N); //Will get the first color
 		Color rColor2 = tempColors.get(5-c1N); //Stores the second color to be removed - opposite of the first one
@@ -1997,8 +1944,6 @@ public class TwoSidePLLPractice extends Application{
 		Color c2 = tempColors.get(c2N); //Will get the 2nd Number
 		thirdColor(c1,c2); //Defines the colors for the rubiks cube using the selected colors
 		//Now set the colors of the different parts of the cube using the new colors array
-		// rubiksCube = [f0,f1,f2,f3,f4,f5,right,left,top]
-	//	System.out.println("" + c1+ ", " + c1N + ", " + c2 + ", " + c2N);
 		rubiksCube.get(6).setColor(faceColors[0]); //Set Right side color
 		rubiksCube.get(7).setColor(faceColors[1]); //Set left side color
 		rubiksCube.get(8).setColor(faceColors[5]); //Set top color
@@ -2008,7 +1953,6 @@ public class TwoSidePLLPractice extends Application{
 	//Cross on a certain color
 	public void newColors(Color crossColor) {
 		ArrayList<Color> tempColors = new ArrayList<Color>(Arrays.asList(colors));
-	//	System.out.println(Arrays.asList(colors));
 		int c1N = tempColors.indexOf(crossColor); //Gets the index for the first color
 		Color c1 = crossColor; //Will get the first color
 		Color rColor2 = tempColors.get(5-c1N); //Stores the second color to be removed - opposite of the first one
@@ -2140,9 +2084,6 @@ public class TwoSidePLLPractice extends Application{
 		Drawable[] cubeParts;
 		double canvasSize = casePen.getCanvas().getWidth(); //Assumes the canvas is a square
 
-//		Canvas caseDisp = new Canvas(canvasSize,canvasSize);
-//		GraphicsContext casePen = caseDisp.getGraphicsContext2D();
-
 		//Initial Location
 		double XPos = canvasSize/2.0;
 		double YPos = 3*canvasSize/4.0;
@@ -2178,7 +2119,6 @@ public class TwoSidePLLPractice extends Application{
 
 		//Draw the cube
 		for(Drawable part: cubeParts) {part.draw(casePen);}
-//		return caseDisp;
 	}
 
 	//Will be used to save the values of other thing
@@ -2196,14 +2136,10 @@ public class TwoSidePLLPractice extends Application{
 		TimestampHist.add(newTime);//Record the TIMESTAMP - Time at which the PLL was identified
 		TimeHist.add((double) (Math.round((float) 10000.0*(newTime-prevTime)))/10000.0);//Record the TIME - time it took to analyze the PLL
 		prevTime = newTime; //The previous time - used to calculate the time it took to do each PLL - MAKE SURE TO SET PREVTIME TO 0 INITIALLY
-		//CheckHist.add(PLLGuess.equals(activePLLname));//Check the guess - RECORD IF RIGHT OR WRONG - DEPRECATED - Auto done in the table
 	}
 
 	//Creates the results table
 	public void setupTable() {
-//    	ObservableList<StatEntry> data = FXCollections.observableArrayList(); //Makes the observable list to put into the table
-//        for(int i = 0;i<GuessNumHist.size();i++) {data.add(new StatEntry(GuessNumHist.get(i),TimestampHist.get(i),PLLHist.get(i),PLLNameHist.get(i),FaceColorHist.get(i),URotHist.get(i),GuessHist.get(i),TimeHist.get(i)));} //adds data into the observable list
-
         //Create the Columns for the Table
         //Sets the value property 'guessNumber' from 'StatEntry' as the data to go into the numCol
         numCol.setCellValueFactory(new PropertyValueFactory<StatEntry, Integer>("guessNumber"));
@@ -2218,7 +2154,6 @@ public class TwoSidePLLPractice extends Application{
         timestampCol.setMinWidth(20);
         drawCol.setMinWidth(75);
         statTable.getColumns().addAll(numCol,timestampCol,drawCol,nameCol,guessCol,timeCol,checkCol); //Add columns to table
-//        statTable.setItems(data); //Add data to table
     }
 
 	//Updates the result table data
@@ -2734,9 +2669,6 @@ public class TwoSidePLLPractice extends Application{
 
 			startTimer.start(); //START THE TIMER
 
-			//while(practiceStartTime.get() > 0) {/* DO NOTHING WHEN THE TIMER IS RUNNING, BECAUSE IT's DISPLAYED ALREADY */};
-			//Start Case of the cube
-			//newCase();
 		} //END OF NORMAL MODE
 	}
 
@@ -2855,8 +2787,6 @@ public class TwoSidePLLPractice extends Application{
         sMcgCol.setMaxWidth(30);
         fMcgCol.setMinWidth(20);
         fMcgCol.setMaxWidth(30);
-//        simpleSessionTable.getColumns().setAll(sPllCol,sQCol,sCCol,sIcCol,sAccCol,sFCol,sSCol,sAvgCol,sStdCol,sMcgCol);
-//        fullSessionTable.getColumns().setAll(fPllCol,fQCol,fCCol,fIcCol,fAccCol,fFCol,fSCol,fAvgCol,fStdCol,fMcgCol);
 		simpleSessionTable.getColumns().setAll(sPllCol,sQCol,sCCol,sAccCol,sFCol,sSCol,sAvgCol,sStdCol,sMcgCol);
         fullSessionTable.getColumns().setAll(fPllCol,fQCol,fCCol,fAccCol,fFCol,fSCol,fAvgCol,fStdCol,fMcgCol);
 	}
@@ -2866,11 +2796,6 @@ public class TwoSidePLLPractice extends Application{
 		//Create new observable lists
 		ObservableList<SessionEntry> simpleData = FXCollections.observableArrayList(); //Makes the observable list to the table
 	    ObservableList<SessionEntry> fullData = FXCollections.observableArrayList(); //Makes the observable list to the table
-
-//	    ObservableList<StatEntry> data = FXCollections.observableArrayList(); //Makes the observable list to put into the table
-//    	for(int i = 0;i<GuessNumHist.size();i++) {data.add(new StatEntry(GuessNumHist.get(i),TimestampHist.get(i),PLLHist.get(i),PLLNameHist.get(i),FaceColorHist.get(i),URotHist.get(i),GuessHist.get(i),TimeHist.get(i)));} //adds data into the observable list
-//        statTable.setItems(data); //Add data to table
-//        updateSessionTables(); //Updates the session tables
 
 	    //Updates the stats for each object
 	    if(difficultyValue == 0) {
@@ -2929,13 +2854,11 @@ public class TwoSidePLLPractice extends Application{
 		createCaseSelect();
 		createButtonActions(); //Moved to own method for to simplify start
 
-//		createSessionTables();
 		updateSessionTables(); //Set initial part for sessions in the tables
 
 		bp.setCenter(initial); //Sets the initial menu
 
 		Scene s = new Scene(bp,screenWidth,screenLength);
-//		createKeybinds(s);
 
 		primary.setScene(s);
 		primary.setTitle("2-Side PLL Practice");
