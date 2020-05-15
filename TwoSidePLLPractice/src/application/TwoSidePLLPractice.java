@@ -10,6 +10,8 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -56,6 +58,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -614,6 +617,14 @@ public class TwoSidePLLPractice extends Application{
 		greenMenu = new ColorMenu("Green",90,224,49); //Green
 		orangeMenu = new ColorMenu("Orange",255,172,24); //Orange
 		yellowMenu = new ColorMenu("Yellow",212,197,0); //Yellow
+		
+//		whiteMenu = new ColorMenu("White",(int) white.getRed(),(int) white.getBlue(),(int) white.getGreen()); //White
+//		redMenu = new ColorMenu("Red",173,8,4); //Red
+//		blueMenu = new ColorMenu("Blue",8,131,219); //Blue
+//		greenMenu = new ColorMenu("Green",90,224,49); //Green
+//		orangeMenu = new ColorMenu("Orange",255,172,24); //Orange
+//		yellowMenu = new ColorMenu("Yellow",212,197,0); //Yellow
+
 
 		//Difficulty Menu
 		difficulty = new Menu("Difficulty");
@@ -1370,16 +1381,19 @@ public class TwoSidePLLPractice extends Application{
 		Button saveSession = new Button("Save as...");
 		saveSession.setOnAction(e -> {
 			try {
-				writeSessionToFile(simpCols, fullCols, "test");
-			} catch (IOException e1) {
+				writeSessionToFile();
+//			} catch (IOException e1) {
+			} catch (Exception e1) {
 				System.out.println("Unable to save file.");
 			}
 		});
 		Button loadSession = new Button("Open File...");
 		loadSession.setOnAction(e -> {
 			try {
-				readSessionFromFile("test");
-			} catch (FileNotFoundException e1) {
+				readSessionFromFile();
+//			} catch (FileNotFoundException e1) {
+			} catch (Exception e1) {
+				System.out.println(e1.getMessage());
 				System.out.println("Unable to load file.");
 			}
 		});
@@ -2030,6 +2044,9 @@ public class TwoSidePLLPractice extends Application{
 		rubiksCube.get(5).setColor(faceColors[PLLCaseColors[activePLL[5]]]);
 	}
 
+	/**
+	 * Updates colors for the entire cube, based on the colors given to it from the initCOLORs.
+	 */
 	public void updateColors() {
 		if(modeValue == 0) {colors = new Color[] {initWhite.getColor(),initRed.getColor(),initBlue.getColor(),initGreen.getColor(),initOrange.getColor(),initYellow.getColor()};} //Normal Mode
 		else if(modeValue == 1) {colors = new Color[] {whiteMenu.getColor(),redMenu.getColor(),blueMenu.getColor(),greenMenu.getColor(),orangeMenu.getColor(),yellowMenu.getColor()};} //IF IN DEBUG MODE
@@ -2762,9 +2779,17 @@ public class TwoSidePLLPractice extends Application{
 		slowest.getChildren().addAll(new Label("Worst Case and Time: "),wc, new Label(" - "),wt); //put bc and bt in HBox together
 		}
 
-		Label desc = new Label("** Q = Question Number, TS = Timestamp, T = Time, ? = right/wrong **");
+//		Label desc = new Label("** Q = Question Number, TS = Timestamp, T = Time, ? = right/wrong **");
+//		desc.setFont(Font.font("Verdana", FontPosture.ITALIC, 8));
+//		desc.setTextFill(Color.rgb(175, 175, 175)); //sets the text light gray
+		
+		Label desc = new Label("** Q = Question Number, TS = Timestamp, PLL = Correct Case **");
 		desc.setFont(Font.font("Verdana", FontPosture.ITALIC, 8));
 		desc.setTextFill(Color.rgb(175, 175, 175)); //sets the text light gray
+		
+		Label desc2 = new Label("** Ans = Answered Case, T = Time, ? = right/wrong **");
+		desc2.setFont(Font.font("Verdana", FontPosture.ITALIC, 8));
+		desc2.setTextFill(Color.rgb(175, 175, 175)); //sets the text light gray
 
 		Button retryButton = new Button("Test Again");
 		retryButton.setOnAction( e2 -> {
@@ -2774,7 +2799,7 @@ public class TwoSidePLLPractice extends Application{
 		});
 
 		//Spacer empty Label for simplicity
-		results.getChildren().addAll(ResultsTitle,correct,avg,acc,fastest,slowest,sp,desc,new Label(),retryButton);
+		results.getChildren().addAll(ResultsTitle,correct,avg,acc,fastest,slowest,sp,desc,desc2,new Label(),retryButton);
 		bp.setCenter(results); //Displays the Final Results VBox
 		//Print results
 		//System.out.printf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",GuessNumHist,PLLHist,PLLNameHist,FaceColorHist,URotHist,GuessHist,TimeHist,CheckHist); //CheckHist is DEPREACATED
@@ -3238,36 +3263,139 @@ public class TwoSidePLLPractice extends Application{
 
 ///////////////////////////////////////////////////////////////
 	
-	public void writeSessionToFile(SessionEntry[] simpleStats, SessionEntry[] fullStats, String fileName) throws IOException {
-//		PrintStream fileWriter = new PrintStream(new File(fileName));
+	public void writeSessionToFile() throws IOException {
 		
-		//SAVE COLORS OF CUBE FIRST
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("Text Files", "*.txt"));
+		fileChooser.setInitialFileName("PLLSessionSave.txt");
+		
+		File saveFile = fileChooser.showSaveDialog(new Stage());
+		
+//		PrintStream fileWriter = new PrintStream(new File(fileName));
+		PrintStream fileWriter = new PrintStream(saveFile);
+		
+		//SAVE COLORS OF CUBE FIRST w r b g o y
+		fileWriter.println("+" + initWhite.getRedInt() + "," + initWhite.getGreenInt() + "," + initWhite.getBlueInt() + "," + 
+				"\n+" + initRed.getRedInt() + "," + initRed.getGreenInt() + "," + initRed.getBlueInt() + "," + 
+				"\n+" + initBlue.getRedInt() + "," + initBlue.getGreenInt() + "," + initBlue.getBlueInt() + "," + 
+				"\n+" + initGreen.getRedInt() + "," + initGreen.getGreenInt() + "," + initGreen.getBlueInt() + "," + 
+				"\n+" + initOrange.getRedInt() + "," + initOrange.getGreenInt() + "," + initOrange.getBlueInt() + "," + 
+				"\n+" + initYellow.getRedInt() + "," + initYellow.getGreenInt() + "," + initYellow.getBlueInt() + ",");
+		
+		System.out.println("+" + initWhite.getRedInt() + "," + initWhite.getGreenInt() + "," + initWhite.getBlueInt() + "," + 
+				"\n+" + initRed.getRedInt() + "," + initRed.getGreenInt() + "," + initRed.getBlueInt() + "," + 
+				"\n+" + initBlue.getRedInt() + "," + initBlue.getGreenInt() + "," + initBlue.getBlueInt() + "," + 
+				"\n+" + initGreen.getRedInt() + "," + initGreen.getGreenInt() + "," + initGreen.getBlueInt() + "," + 
+				"\n+" + initOrange.getRedInt() + "," + initOrange.getGreenInt() + "," + initOrange.getBlueInt() + "," + 
+				"\n+" + initYellow.getRedInt() + "," + initYellow.getGreenInt() + "," + initYellow.getBlueInt() + ",");
+		
+//		fileWriter.println("+" + white.getRed() + "," + white.getGreen() + "," + white.getBlue() + 
+//				"\n+" + red.getRed() + "," + red.getGreen() + "," + red.getBlue() + 
+//				"\n+" + blue.getRed() + "," + blue.getGreen() + "," + blue.getBlue() +
+//				"\n+" + green.getRed() + "," + green.getGreen() + "," + green.getBlue() +
+//				"\n+" + orange.getRed() + "," + orange.getGreen() + "," + orange.getBlue() +
+//				"\n+" + yellow.getRed() + "," + yellow.getGreen() + "," + yellow.getBlue());
+//		
+//		System.out.println("+" + white.getRed() + "," + white.getGreen() + "," + white.getBlue() + 
+//				"\n+" + red.getRed() + "," + red.getGreen() + "," + red.getBlue() + 
+//				"\n+" + blue.getRed() + "," + blue.getGreen() + "," + blue.getBlue() +
+//				"\n+" + green.getRed() + "," + green.getGreen() + "," + green.getBlue() +
+//				"\n+" + orange.getRed() + "," + orange.getGreen() + "," + orange.getBlue() +
+//				"\n+" + yellow.getRed() + "," + yellow.getGreen() + "," + yellow.getBlue());
 		
 		for(int i = 0; i < simpCols.length; i++) {
 			System.out.println(simpCols[i].toString());
-//			fileWriter.println(simpCols[i].toString());
+			fileWriter.println(simpCols[i].toString());
 		}
 		for(int i = 0; i < fullCols.length; i++) {
 			System.out.println(fullCols[i].toString());
-//			fileWriter.println(simpCols[i].toString());
+			fileWriter.println(fullCols[i].toString());
 		}
 		
-//		fileWriter.close();
+		fileWriter.close();
 	}
 	
 	//Will write them automatically if correct. Doesn't return anything.
-	public void readSessionFromFile(String fileName) throws FileNotFoundException {
-//		Scanner fileReader = new Scanner(new FileInputStream(fileName));
-//		SessionEntry[] simpEntries = new SessionEntry[88]; //22 cases * 4 side orientations of each
-//		SessionEntry[] fullEntries = new SessionEntry[88]; 
-//		while (fileReader.hasNextLine()) {
-//			try {
-//				
-//			}
-//		}
+	public void readSessionFromFile() throws FileNotFoundException {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("Text Files", "*.txt"));
+		
+		File openFile = fileChooser.showOpenDialog(new Stage());
+		
+		Scanner fileReader = new Scanner(new FileInputStream(openFile));
+		SessionEntry[] simpEntries = new SessionEntry[88]; //22 cases * 4 side orientations of each
+		SessionEntry[] fullEntries = new SessionEntry[88];
+		
+		fileReader.useDelimiter("\\+");
+		String[] newColors = new String[6];
+		for(int i = 0; i < 6; i++) {
+			if(fileReader.hasNext()) {
+				newColors[i] = fileReader.next();
+			} else {
+				fileReader.close();
+				throw new IllegalArgumentException("Invalid Cube Colors");
+			}
+		}
+		
+		try {
+			readColors(newColors);
+		} catch (Exception e) {
+			fileReader.close();
+			System.out.println("Failed to make colors");
+			e.printStackTrace();
+		}
+		
+		fileReader.useDelimiter("*");
+		
+		for(int i = 0; i < 88; i++) {
+			if(fileReader.hasNext()) {
+				System.out.println(fileReader.next());
+			} else {
+				fileReader.close();
+				throw new IllegalArgumentException("Invalid Simple Entries");
+			}
+		}
+		
+		for(int i = 0; i < 88; i++) {
+			if(fileReader.hasNext()) {
+				System.out.println(fileReader.next());
+			} else {
+				fileReader.close();
+				throw new IllegalArgumentException("Invalid Full Entries");
+			}
+		}
+		
+		fileReader.close();
 	}
+	
+	/**
+	 * Private helper method used to set the colors of the cube from the values given in the file. It is called in 
+	 * readSessionFromFile() where the cube colors should be the first things in the file.
+	 * @param colors should be an array of 6 elements with values representing the RGB values of each.
+	 */
+	private void readColors(String[] colors) { //WORKS
+		InitColor[] colorVars = new InitColor[] {initWhite, initRed, initBlue, initGreen, initOrange, initYellow};
+		for(int i = 0; i < 6; i++) {
+			Scanner colorReader = new Scanner(colors[i]);
+			colorReader.useDelimiter(",");
+			try {
+//				int int1 = colorReader.nextInt();
+//				System.out.println(int1);
+//				int int2 = colorReader.nextInt();
+//				System.out.println(int2);
+//				int int3 = colorReader.nextInt();
+//				System.out.println(int3);
+//				colorVars[i].setColor(int1, int2, int3);
+				colorVars[i].setColor(colorReader.nextInt(), colorReader.nextInt(), colorReader.nextInt());
+			} catch (NoSuchElementException e) {
+				colorReader.close();
+				throw new IllegalArgumentException("Invalid color in file.");
+			}
+//			System.out.println("End of Color Changed.");
+		}
 		
 		
+	}
 	
 
 ////////////////////////////////////////////////////////////////////////

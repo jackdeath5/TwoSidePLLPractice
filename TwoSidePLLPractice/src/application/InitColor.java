@@ -40,12 +40,13 @@ public class InitColor extends HBox {
 			disPen.fillRect(0, 0, colorDisp.getWidth(), colorDisp.getHeight());
 
 			redtf.textProperty().addListener((ov, old_val, new_val) -> {
-				if(!new_val.matches("\\d*")) {redtf.setText(new_val.replaceAll("[^\\d]", ""));} //Gets Rid of Non-Numerical Characters
+				if(!new_val.matches("\\d*")) {redtf.setText(new_val.replaceAll("[^\\d]", "")); new_val = new_val.replaceAll("[^\\d]", "");} //Gets Rid of Non-Numerical Characters
 				if(new_val.isEmpty()) {redtf.setText("0"); new_val = "0";} //WILL SET TO 0  IF NOTHING IS IN THE BOX
 				if(new_val.length() > 3) {redtf.setText(redtf.getText().substring(0, 3)); new_val = redtf.getText();} //to keep number at 3 digits MAX
 				if(Integer.parseInt(new_val) > 255) {redtf.setText("255"); new_val ="255";}//{new_val = "100";} //Sets the text field to 100 if number input is larger than that
 				if(new_val.charAt(0) == '0' && new_val.length() >= 2) {redtf.setText(redtf.getText().substring(1, new_val.length()));}
 				//Change the  color of the textfield label
+				System.out.println(new_val);
 				redLabel.changeColor(Integer.parseInt(new_val),0,0);
 				//Change the color of the canvas
 				disPen.setFill(Color.WHITE);
@@ -55,10 +56,10 @@ public class InitColor extends HBox {
 			});
 
 			greentf.textProperty().addListener((ov, old_val, new_val) -> {
-				if(!new_val.matches("\\d*")) {greentf.setText(new_val.replaceAll("[^\\d]", ""));} //Gets Rid of Non-Numerical Characters
+				if(!new_val.matches("\\d*")) {greentf.setText(new_val.replaceAll("[^\\d]", "")); new_val = new_val.replaceAll("[^\\d]", "");} //Gets Rid of Non-Numerical Characters
 				if(new_val.isEmpty()) {greentf.setText("0"); new_val = "0";} //WILL SET TO 0  IF NOTHING IS IN THE BOX
 				if(new_val.length() > 3) {greentf.setText(greentf.getText().substring(0, 3));} //to keep number at 3 digits MAX
-				if(Integer.parseInt(new_val) > 255) {greentf.setText("255");}//{new_val = "100";} //Sets the text field to 100 if number input is larger than that
+				if(Integer.parseInt(new_val) > 255) {greentf.setText("255"); new_val ="255";}//{new_val = "100";} //Sets the text field to 100 if number input is larger than that
 				if(new_val.charAt(0) == '0' && new_val.length() >= 2) {greentf.setText(greentf.getText().substring(1, new_val.length()));}
 				//Change the  color of the textfield label
 				greenLabel.changeColor(0,Integer.parseInt(new_val),0);
@@ -70,10 +71,10 @@ public class InitColor extends HBox {
 			});
 
 			bluetf.textProperty().addListener((ov, old_val, new_val) -> {
-				if(!new_val.matches("\\d*")) {bluetf.setText(new_val.replaceAll("[^\\d]", ""));} //Gets Rid of Non-Numerical Characters
+				if(!new_val.matches("\\d*")) {bluetf.setText(new_val.replaceAll("[^\\d]", "")); new_val = new_val.replaceAll("[^\\d]", "");} //Gets Rid of Non-Numerical Characters
 				if(new_val.isEmpty()) {bluetf.setText("0"); new_val = "0";} //WILL SET TO 0  IF NOTHING IS IN THE BOX
 				if(new_val.length() > 3) {bluetf.setText(bluetf.getText().substring(0, 3));} //to keep number at 3 digits MAX
-				if(Integer.parseInt(new_val) > 255) {bluetf.setText("255");}//{new_val = "100";} //Sets the text field to 100 if number input is larger than that
+				if(Integer.parseInt(new_val) > 255) {bluetf.setText("255"); new_val ="255";}//{new_val = "100";} //Sets the text field to 100 if number input is larger than that
 				if(new_val.charAt(0) == '0' && new_val.length() >= 2) {bluetf.setText(bluetf.getText().substring(1, new_val.length()));}
 				//Change the  color of the textfield label
 				blueLabel.changeColor(0,Integer.parseInt(new_val),0);
@@ -94,5 +95,15 @@ public class InitColor extends HBox {
 		public int getRedInt() {return Integer.parseInt(redtf.getText());}
 		public int getGreenInt() {return Integer.parseInt(greentf.getText());}
 		public int getBlueInt() {return Integer.parseInt(bluetf.getText());}
+		
+		public void setColor(int red, int green, int blue) {
+			if(red > 255 || green > 255 || blue > 255) {
+				throw new IllegalArgumentException("Colors cannot be greater than 255");
+				//Maybe make it so colors greater than 255 will be set to 255?
+			}
+			redtf.setText(red + "");
+			greentf.setText(green + "");
+			bluetf.setText(blue + "");
+		}
 
 	} //END OF INITCOLOR CLASS
