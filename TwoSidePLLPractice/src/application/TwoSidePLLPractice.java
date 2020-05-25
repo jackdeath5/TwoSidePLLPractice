@@ -1390,6 +1390,7 @@ public class TwoSidePLLPractice extends Application{
 		Button loadSession = new Button("Open File...");
 		loadSession.setOnAction(e -> {
 			try {
+				System.out.println("Reading File: ");
 				readSessionFromFile();
 //			} catch (FileNotFoundException e1) {
 			} catch (Exception e1) {
@@ -3092,7 +3093,7 @@ public class TwoSidePLLPractice extends Application{
 		private String mostWrongGuess;
 
 		//Used to create this object. Will be modified by adding things to the ArrayLists
-		SessionEntry(String fullPermName) {
+		public SessionEntry(String fullPermName) {
 			this.fullPermName = fullPermName;
 			questionsNUM = 0;
 			correctNUM = 0;
@@ -3104,12 +3105,74 @@ public class TwoSidePLLPractice extends Application{
 			incorrect = "N/A";
 			accuracy = "N/A";
 
-			times = new ArrayList<>();
+			this.times = new ArrayList<Double>();
 			fastest = "N/A";
 			slowest = "N/A";
 			averageT = "N/A";
 			stdDevT = "N/A";
-			wrongGuesses = new ArrayList<>();
+			this.wrongGuesses = new ArrayList<String>();
+			mostWrongGuess = "N/A";
+		}
+		
+		/**
+		 * Constructor used when creating it with data already in it. Most things are calculated from 
+		 * what is given, but if no data is given to it, "N/A" will be left in it's place.
+		 * @param fullPermName the full name of the permutation.
+		 * @param correctTimes double array of the times of the correct guesses made.
+		 * @param wrongGuesses String array of all of the wrong guesses made.
+		 */
+		public SessionEntry(String fullPermName, Double[] correctTimes, String[] wrongGuesses) {
+			this.fullPermName = fullPermName;
+			questionsNUM = correctTimes.length + wrongGuesses.length;
+			correctNUM = correctTimes.length;
+			incorrectNUM = wrongGuesses.length;
+			
+			if(questionsNUM == 0) {
+				accuracyNUM = 0;
+			} else {
+				accuracyNUM = correctNUM / questionsNUM;
+			}
+
+			questions = getQuestions();
+			correct = getCorrect();
+			incorrect = getIncorrect();
+			accuracy = getAccuracy();
+
+			times = new ArrayList<Double>();
+			for(int i = 0; i < correctTimes.length; i++) {
+				times.add(correctTimes[i]);
+			}
+			fastest = getFastest();
+			slowest = getSlowest();
+			averageT = getAverageT();
+			stdDevT = getStdDevT();
+			this.wrongGuesses = new ArrayList<String>();
+			for(int i = 0; i < wrongGuesses.length; i++) {
+				this.wrongGuesses.add(wrongGuesses[i]);
+			}
+			mostWrongGuess = getMostWrongGuess();
+		}
+		
+		/**
+		 * Resets all of the data in the column to that of a new column with no data.
+		 */
+		public void reset() {
+			questionsNUM = 0;
+			correctNUM = 0;
+			incorrectNUM = 0;
+			accuracyNUM = 0;
+
+			questions = "N/A";
+			correct = "N/A";
+			incorrect = "N/A";
+			accuracy = "N/A";
+
+			this.times = new ArrayList<Double>();
+			fastest = "N/A";
+			slowest = "N/A";
+			averageT = "N/A";
+			stdDevT = "N/A";
+			this.wrongGuesses = new ArrayList<String>();
 			mostWrongGuess = "N/A";
 		}
 
@@ -3229,10 +3292,10 @@ public class TwoSidePLLPractice extends Application{
 		public void setTimes(ArrayList<Double> a) {times = a;}
 		public void setWrongGuesses(ArrayList<String> a) {wrongGuesses = a;}
 		
+		//removed * -totalGuesses, totalCorrectGuesses due to it being unnecessary
 		/**
 		 * Returns the cell and data in the format:
 		 * *fullPermName
-		 * -totalGuesses, totalCorrectGuesses
 		 * -time1,time2,timeN...
 		 * -wrongGuess1,wrongGuess2,wrongGuessN...
 		 * 
@@ -3241,18 +3304,18 @@ public class TwoSidePLLPractice extends Application{
 		@Override
 		public String toString() {
 			String outString = "*" + fullPermName + 
-					"\n-" + questionsNUM + "," + correctNUM +
+					//"\n-" + questionsNUM + "," + correctNUM + REMOVED FOR BEING UNNECESSARY
 					"\n-";
 			for(int i = 0; i < times.size(); i++) {
 				outString += times.get(i);
-				if(i < times.size() - 1) {
+				if(i < times.size() - 1) { //- 1 to remove the last comma. removed because delimiter needs that last comma to work
 					outString += ",";
 				}
 			}
 			outString += "\n-";
 			for(int i = 0; i < wrongGuesses.size(); i++) {
 				outString += wrongGuesses.get(i);
-				if(i < wrongGuesses.size() - 1) {
+				if(i < wrongGuesses.size() - 1) { //- 1 to remove the last comma. removed because delimiter needs that last comma to work
 					outString += ",";
 				}
 			}
@@ -3275,65 +3338,56 @@ public class TwoSidePLLPractice extends Application{
 		PrintStream fileWriter = new PrintStream(saveFile);
 		
 		//SAVE COLORS OF CUBE FIRST w r b g o y
-		fileWriter.println("+" + initWhite.getRedInt() + "," + initWhite.getGreenInt() + "," + initWhite.getBlueInt() + "," + 
-				"\n+" + initRed.getRedInt() + "," + initRed.getGreenInt() + "," + initRed.getBlueInt() + "," + 
-				"\n+" + initBlue.getRedInt() + "," + initBlue.getGreenInt() + "," + initBlue.getBlueInt() + "," + 
-				"\n+" + initGreen.getRedInt() + "," + initGreen.getGreenInt() + "," + initGreen.getBlueInt() + "," + 
-				"\n+" + initOrange.getRedInt() + "," + initOrange.getGreenInt() + "," + initOrange.getBlueInt() + "," + 
-				"\n+" + initYellow.getRedInt() + "," + initYellow.getGreenInt() + "," + initYellow.getBlueInt() + ",");
+		fileWriter.println("+" + initWhite.getRedInt() + "," + initWhite.getGreenInt() + "," + initWhite.getBlueInt() + /*"," + */
+				"\n+" + initRed.getRedInt() + "," + initRed.getGreenInt() + "," + initRed.getBlueInt() + /*"," + */
+				"\n+" + initBlue.getRedInt() + "," + initBlue.getGreenInt() + "," + initBlue.getBlueInt() + /*"," + */
+				"\n+" + initGreen.getRedInt() + "," + initGreen.getGreenInt() + "," + initGreen.getBlueInt() + /*"," + */
+				"\n+" + initOrange.getRedInt() + "," + initOrange.getGreenInt() + "," + initOrange.getBlueInt() + /*"," + */
+				"\n+" + initYellow.getRedInt() + "," + initYellow.getGreenInt() + "," + initYellow.getBlueInt() /*+ ","*/);
 		
-		System.out.println("+" + initWhite.getRedInt() + "," + initWhite.getGreenInt() + "," + initWhite.getBlueInt() + "," + 
-				"\n+" + initRed.getRedInt() + "," + initRed.getGreenInt() + "," + initRed.getBlueInt() + "," + 
-				"\n+" + initBlue.getRedInt() + "," + initBlue.getGreenInt() + "," + initBlue.getBlueInt() + "," + 
-				"\n+" + initGreen.getRedInt() + "," + initGreen.getGreenInt() + "," + initGreen.getBlueInt() + "," + 
-				"\n+" + initOrange.getRedInt() + "," + initOrange.getGreenInt() + "," + initOrange.getBlueInt() + "," + 
-				"\n+" + initYellow.getRedInt() + "," + initYellow.getGreenInt() + "," + initYellow.getBlueInt() + ",");
-		
-//		fileWriter.println("+" + white.getRed() + "," + white.getGreen() + "," + white.getBlue() + 
-//				"\n+" + red.getRed() + "," + red.getGreen() + "," + red.getBlue() + 
-//				"\n+" + blue.getRed() + "," + blue.getGreen() + "," + blue.getBlue() +
-//				"\n+" + green.getRed() + "," + green.getGreen() + "," + green.getBlue() +
-//				"\n+" + orange.getRed() + "," + orange.getGreen() + "," + orange.getBlue() +
-//				"\n+" + yellow.getRed() + "," + yellow.getGreen() + "," + yellow.getBlue());
-//		
-//		System.out.println("+" + white.getRed() + "," + white.getGreen() + "," + white.getBlue() + 
-//				"\n+" + red.getRed() + "," + red.getGreen() + "," + red.getBlue() + 
-//				"\n+" + blue.getRed() + "," + blue.getGreen() + "," + blue.getBlue() +
-//				"\n+" + green.getRed() + "," + green.getGreen() + "," + green.getBlue() +
-//				"\n+" + orange.getRed() + "," + orange.getGreen() + "," + orange.getBlue() +
-//				"\n+" + yellow.getRed() + "," + yellow.getGreen() + "," + yellow.getBlue());
+		System.out.println("+" + initWhite.getRedInt() + "," + initWhite.getGreenInt() + "," + initWhite.getBlueInt() + /*"," + */
+				"\n+" + initRed.getRedInt() + "," + initRed.getGreenInt() + "," + initRed.getBlueInt() + /*"," + */
+				"\n+" + initBlue.getRedInt() + "," + initBlue.getGreenInt() + "," + initBlue.getBlueInt() + /*"," + */
+				"\n+" + initGreen.getRedInt() + "," + initGreen.getGreenInt() + "," + initGreen.getBlueInt() + /*"," + */
+				"\n+" + initOrange.getRedInt() + "," + initOrange.getGreenInt() + "," + initOrange.getBlueInt() + /*"," + */
+				"\n+" + initYellow.getRedInt() + "," + initYellow.getGreenInt() + "," + initYellow.getBlueInt() /*+ ","*/);
 		
 		for(int i = 0; i < simpCols.length; i++) {
-			System.out.println(simpCols[i].toString());
-			fileWriter.println(simpCols[i].toString());
+			System.out.println("*s" + simpCols[i].toString());
+			fileWriter.println("*s" + simpCols[i].toString());
 		}
 		for(int i = 0; i < fullCols.length; i++) {
-			System.out.println(fullCols[i].toString());
-			fileWriter.println(fullCols[i].toString());
+			System.out.println("*f" + fullCols[i].toString());
+			fileWriter.println("*f" + fullCols[i].toString());
 		}
 		
 		fileWriter.close();
 	}
 	
-	//Will write them automatically if correct. Doesn't return anything.
-	public void readSessionFromFile() throws FileNotFoundException {
+	/**
+	 * 
+	 * @throws FileNotFoundException
+	 * @throws IllegalArgumentException
+	 */
+	public void readSessionFromFile() throws FileNotFoundException, IllegalArgumentException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("Text Files", "*.txt"));
 		
 		File openFile = fileChooser.showOpenDialog(new Stage());
 		
 		Scanner fileReader = new Scanner(new FileInputStream(openFile));
-		SessionEntry[] simpEntries = new SessionEntry[88]; //22 cases * 4 side orientations of each
-		SessionEntry[] fullEntries = new SessionEntry[88];
+		//Below ArrayLists are used to keep track of entries that have been changed from loading from the file
+		ArrayList<String> addedSimpEntries = new ArrayList<String>();
+		ArrayList<String> addedFullEntries = new ArrayList<String>();
 		
 		fileReader.useDelimiter("\\+");
 		String[] newColors = new String[6];
 		for(int i = 0; i < 6; i++) {
 			if(fileReader.hasNext()) {
-				newColors[i] = fileReader.next();
+				newColors[i] = fileReader.nextLine().strip(); //used nextLine instead of next due to problems with last color including extra data
 			} else {
 				fileReader.close();
-				throw new IllegalArgumentException("Invalid Cube Colors");
+				throw new IllegalArgumentException("Missing Cube Colors in file.");
 			}
 		}
 		
@@ -3341,31 +3395,61 @@ public class TwoSidePLLPractice extends Application{
 			readColors(newColors);
 		} catch (Exception e) {
 			fileReader.close();
-			System.out.println("Failed to make colors");
-			e.printStackTrace();
-		}
-		
-		fileReader.useDelimiter("*");
-		
-		for(int i = 0; i < 88; i++) {
-			if(fileReader.hasNext()) {
-				System.out.println(fileReader.next());
-			} else {
-				fileReader.close();
-				throw new IllegalArgumentException("Invalid Simple Entries");
-			}
-		}
-		
-		for(int i = 0; i < 88; i++) {
-			if(fileReader.hasNext()) {
-				System.out.println(fileReader.next());
-			} else {
-				fileReader.close();
-				throw new IllegalArgumentException("Invalid Full Entries");
-			}
+//			throw new IllegalArgumentException("Invalid Color(s) in file.");
+			throw new IllegalArgumentException(e.getMessage());
+//			System.out.println("Failed to make colors");
+//			e.printStackTrace();
 		}
 		
 		fileReader.close();
+		fileReader = new Scanner(new FileInputStream(openFile));
+		
+		fileReader.useDelimiter("\\n[*]"); //("\\\n\\*[sf]\\*");
+		
+		System.out.println(fileReader.hasNext() + " " + fileReader.next());
+		
+		//Current Potential Issue:
+	//	What about the entries that are not changed? -- Reset to a new column with no data.
+	//	What about the same entry being put in multiple times? -- The last entry's data will be used.
+	//	Assumed that illegal entries are ignored -- IllegalArgumentException is thrown if illegal entries are detected.
+		
+		while(fileReader.hasNext()) {
+			String text = fileReader.next();
+			String outString = "";
+			if(text.substring(0,2).matches("s\\*")) {
+				System.out.println("SIMPLE: " + text.substring(2));
+				outString = readEntry(simpCols, text.substring(2));
+				if(!addedSimpEntries.contains(outString)) {
+					addedSimpEntries.add(outString);
+				}
+			} else if(text.substring(0,2).matches("f\\*")) {
+				System.out.println("FULL: " + text.substring(2));
+				outString = readEntry(fullCols, text.substring(2));
+				if(outString != null && !addedFullEntries.contains(outString)) {
+					addedFullEntries.add(outString);
+				}
+			} else {
+				fileReader.close();
+				throw new IllegalArgumentException("Invalid entries in file");
+			}
+		}
+		fileReader.close(); //FileReader closed because no longer needed.
+		
+		//Reset all non-changed columns in simple
+		for(int i = 0; i < simpCols.length; i++) {
+			if(!addedSimpEntries.contains(simpCols[i].getFullPermName())) {
+				simpCols[i].reset();
+			}
+		}
+		
+		//Reset all non-changed columns in full
+		for(int i = 0; i < fullCols.length; i++) {
+			if(!addedFullEntries.contains(fullCols[i].getFullPermName())) {
+				fullCols[i].reset();
+			}
+		}
+		
+		updateSessionTables();
 	}
 	
 	/**
@@ -3376,27 +3460,140 @@ public class TwoSidePLLPractice extends Application{
 	private void readColors(String[] colors) { //WORKS
 		InitColor[] colorVars = new InitColor[] {initWhite, initRed, initBlue, initGreen, initOrange, initYellow};
 		for(int i = 0; i < 6; i++) {
-			Scanner colorReader = new Scanner(colors[i]);
-			colorReader.useDelimiter(",");
-			try {
-//				int int1 = colorReader.nextInt();
-//				System.out.println(int1);
-//				int int2 = colorReader.nextInt();
-//				System.out.println(int2);
-//				int int3 = colorReader.nextInt();
-//				System.out.println(int3);
-//				colorVars[i].setColor(int1, int2, int3);
-				colorVars[i].setColor(colorReader.nextInt(), colorReader.nextInt(), colorReader.nextInt());
-			} catch (NoSuchElementException e) {
-				colorReader.close();
-				throw new IllegalArgumentException("Invalid color in file.");
+			String[] splitVals = colors[i].split(",");
+			System.out.println(splitVals.length);
+			if(splitVals.length != 3) { //check to make sure only 3 numbers exist
+				for(int j = 0; j < splitVals.length; j++) {
+					System.out.println(splitVals[j]);
+				}
+				throw new IllegalArgumentException("Invalid Color(s) in file. 1");
 			}
+			try {
+				System.out.println(splitVals[0] + " - " + splitVals[1] + " - " + splitVals[2]); //Problem is not stripping the \n off of last vals
+				colorVars[i].setColor(Integer.parseInt(splitVals[0]), Integer.parseInt(splitVals[1]), Integer.parseInt(splitVals[2]));
+			} catch (Exception e) { //Number format + whatever wrong values are thrown into the setColor
+				throw new IllegalArgumentException("Invalid Color(s) in file. 2");
+			}
+			
+//			Scanner colorReader = new Scanner(colors[i]);
+//			colorReader.useDelimiter(",");
+//			try {
+//				colorVars[i].setColor(colorReader.nextInt(), colorReader.nextInt(), colorReader.nextInt());
+//			} catch (NoSuchElementException e) {
+//				colorReader.close();
+//				throw new IllegalArgumentException("Invalid Color in file.");
+//			}
 //			System.out.println("End of Color Changed.");
 		}
+	}
 		
+	/**
+	 * Private helper method used to process the entries from a String read for the entry from the file 
+	 * within the readSessionFromFile() method.
+	 * @param typeCol the type of columns that it is a part of, which could be either simpCols or fullCols
+	 * @param entry the String representing the entry which is being processed
+	 * @return a String of the full entry name if it was processed correctly.
+	 * @throws IllegalArgumentException if the entry, or anything in it, is not valid. 
+	 */
+	private String readEntry(SessionEntry[] typeCol, String entry) throws IllegalArgumentException {
+		Scanner entryReader = new Scanner(entry);
+		entryReader.useDelimiter("\\n\\-");
 		
+		String fullCaseName; //name of the case
+		String correctTimes; //times of the correct guesses
+		String wrongGuesses; //wrong guesses made
+		
+		try {
+		/*
+			 R1-3
+			 -
+			 -
+		 */
+//			System.out.println("SYSOUT1: " + entryReader.next());
+//			System.out.println("SYSOUT2: " + entryReader.next());
+			fullCaseName = entryReader.next().strip();
+			correctTimes = entryReader.next().strip();
+			wrongGuesses = entryReader.next().strip();
+		} catch (NoSuchElementException e) {
+			entryReader.close();
+			throw new IllegalArgumentException("Invalid Entry in file.");
+		}
+		entryReader.close(); //closing entryReader because everything needed should've been recorded
+		
+		if(TwoSidePLLPractice.isValidFullCaseName(fullCaseName)) { //Checks for if it's a valid case.
+			//If valid, it will change the settings of that case in the typeCol
+			String[] timeStrings = correctTimes.split(",");
+			if(timeStrings.length == 1 && timeStrings[0].isBlank()) { //In case it's empty, to get rid of the ""
+				timeStrings = new String[0];
+			}
+			Double[] newTimes = new Double[timeStrings.length];
+			for(int i = 0; i < timeStrings.length; i++) {
+				try {
+					newTimes[i] = Double.parseDouble(timeStrings[i]);
+				} catch (NumberFormatException e) {
+					throw new IllegalArgumentException("Illegal Time in file.");
+				}
+			}
+			String[] newWrongGuesses = wrongGuesses.split(",");
+			if(newWrongGuesses.length == 1 && newWrongGuesses[0].isBlank()) { //In case it's empty, to get rid of the ""
+				newWrongGuesses = new String[0];
+			}
+			for(int i = 0; i < newWrongGuesses.length; i++) { //check to make sure all wrong guesses are WRONG and VALID
+				System.out.println(newWrongGuesses.length);
+				if(fullCaseName.equals(newWrongGuesses[i]) || !TwoSidePLLPractice.isValidSimpCaseName(newWrongGuesses[i])) {
+					//PROBLEM: fullCaseName will NEVER equal wrongGuess, because wrongGuess is SIMPLE and NOT FULL.
+//					System.out.println("Invalid case detected in file: " + newWrongGuesses[i]);
+					throw new IllegalArgumentException("Illegal Wrong Guess Case in file.");
+				}
+			}
+			// Replaces the column with the new data loaded from the entry
+			for(int i = 0; i < typeCol.length; i++) {
+				if(typeCol[i].getFullPermName().equals(fullCaseName)) {
+					typeCol[i] = new SessionEntry(fullCaseName, newTimes, newWrongGuesses);
+					break; //Stops the for loop since there should only be one case to change
+				}
+			}
+			return fullCaseName;
+		} else { //if the case is not valid...
+//			return null; //Returns null if the case is not valid. 
+			throw new IllegalArgumentException("Invalid PLL Case in file."); //Throws an illegalArgumentException if a case in the file isn't valid.
+		}
 	}
 	
+	/**
+	 * Static method used to return a boolean if the full case name is a valid one or not.
+	 * @param caseName String of the case name to be checked to see if it's a valid case name.
+	 * @return boolean for if the full case name is valid or not.
+	 */
+	private static boolean isValidFullCaseName(String caseName) {
+		// "A1-1", "A1-2", "A1-3", "A1-4", "A2-1", "A2-2", "A2-3", "A2-4", "E-1", "E-2", "E-3", "E-4", "F-1", "F-2", "F-3", "F-4", "G1-1", "G1-2", "G1-3", "G1-4", "G2-1", "G2-2", "G2-3", "G2-4", "G3-1", "G3-2", "G3-3", "G3-4", "G4-1", "G4-2", "G4-3", "G4-4", "H-1", "H-2", "H-3", "H-4", "J1-1", "J1-2", "J1-3", "J1-4", "J2-1", "J2-2", "J2-3", "J2-4", "N1-1", "N1-2", "N1-3", "N1-4", "N2-1", "N2-2", "N2-3", "N2-4", "R1-1", "R1-2", "R1-3", "R1-4", "R2-1", "R2-2", "R2-3", "R2-4", "SKIP-1", "SKIP-2", "SKIP-3", "SKIP-4", "T-1", "T-2", "T-3", "T-4", "U1-1", "U1-2", "U1-3", "U1-4", "U2-1", "U2-2", "U2-3", "U2-4", "V-1", "V-2", "V-3", "V-4", "Y-1", "Y-2", "Y-3", "Y-4", "Z-1", "Z-2", "Z-3", "Z-4"
+		
+		/*"A1-1", "A1-2", "A1-3", "A1-4", "A2-1", "A2-2", "A2-3", "A2-4", "E-1", "E-2", "E-3", "E-4", "F-1", "F-2", "F-3", "F-4", 
+		 * "G1-1", "G1-2", "G1-3", "G1-4", "G2-1", "G2-2", "G2-3", "G2-4", "G3-1", "G3-2", "G3-3", "G3-4", "G4-1", "G4-2", "G4-3", 
+		 * "G4-4", "H-1", "H-2", "H-3", "H-4", "J1-1", "J1-2", "J1-3", "J1-4", "J2-1", "J2-2", "J2-3", "J2-4", "N1-1", "N1-2", "N1-3", 
+		 * "N1-4", "N2-1", "N2-2", "N2-3", "N2-4", "R1-1", "R1-2", "R1-3", "R1-4", "R2-1", "R2-2", "R2-3", "R2-4", "SKIP-1", "SKIP-2", 
+		 * "SKIP-3", "SKIP-4", "T-1", "T-2", "T-3", "T-4", "U1-1", "U1-2", "U1-3", "U1-4", "U2-1", "U2-2", "U2-3", "U2-4", "V-1", "V-2", 
+		 * "V-3", "V-4", "Y-1", "Y-2", "Y-3", "Y-4", "Z-1", "Z-2", "Z-3", "Z-4"
+		 */
+		
+		if(caseName.matches("^[AJNRU][12]\\-[1-4]$|^G[1-4]\\-[1-4]$|^[EFHTVYZ]\\-[1-4]$|^SKIP\\-[1-4]$")) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Static method used to return a boolean if the simple case name is a valid one or not.
+	 * @param caseName String of the case name to be checked to see if it's a valid case name.
+	 * @return boolean for if the simple case name is valid or not.
+	 */
+	private static boolean isValidSimpCaseName(String caseName) {
+		if(caseName.matches("^[AJNRU][12]?$|^G[1-4]?$|^[EFHTVYZ]$|^SKIP$")) {
+			return true;
+		}
+		return false;
+	}
+		
 
 ////////////////////////////////////////////////////////////////////////
 	public static void main(String[] args) {launch(args);}

@@ -46,7 +46,7 @@ public class InitColor extends HBox {
 				if(Integer.parseInt(new_val) > 255) {redtf.setText("255"); new_val ="255";}//{new_val = "100";} //Sets the text field to 100 if number input is larger than that
 				if(new_val.charAt(0) == '0' && new_val.length() >= 2) {redtf.setText(redtf.getText().substring(1, new_val.length()));}
 				//Change the  color of the textfield label
-				System.out.println(new_val);
+//				System.out.println(new_val);
 				redLabel.changeColor(Integer.parseInt(new_val),0,0);
 				//Change the color of the canvas
 				disPen.setFill(Color.WHITE);
@@ -58,7 +58,7 @@ public class InitColor extends HBox {
 			greentf.textProperty().addListener((ov, old_val, new_val) -> {
 				if(!new_val.matches("\\d*")) {greentf.setText(new_val.replaceAll("[^\\d]", "")); new_val = new_val.replaceAll("[^\\d]", "");} //Gets Rid of Non-Numerical Characters
 				if(new_val.isEmpty()) {greentf.setText("0"); new_val = "0";} //WILL SET TO 0  IF NOTHING IS IN THE BOX
-				if(new_val.length() > 3) {greentf.setText(greentf.getText().substring(0, 3));} //to keep number at 3 digits MAX
+				if(new_val.length() > 3) {greentf.setText(greentf.getText().substring(0, 3)); new_val = greentf.getText();} //to keep number at 3 digits MAX
 				if(Integer.parseInt(new_val) > 255) {greentf.setText("255"); new_val ="255";}//{new_val = "100";} //Sets the text field to 100 if number input is larger than that
 				if(new_val.charAt(0) == '0' && new_val.length() >= 2) {greentf.setText(greentf.getText().substring(1, new_val.length()));}
 				//Change the  color of the textfield label
@@ -73,7 +73,7 @@ public class InitColor extends HBox {
 			bluetf.textProperty().addListener((ov, old_val, new_val) -> {
 				if(!new_val.matches("\\d*")) {bluetf.setText(new_val.replaceAll("[^\\d]", "")); new_val = new_val.replaceAll("[^\\d]", "");} //Gets Rid of Non-Numerical Characters
 				if(new_val.isEmpty()) {bluetf.setText("0"); new_val = "0";} //WILL SET TO 0  IF NOTHING IS IN THE BOX
-				if(new_val.length() > 3) {bluetf.setText(bluetf.getText().substring(0, 3));} //to keep number at 3 digits MAX
+				if(new_val.length() > 3) {bluetf.setText(bluetf.getText().substring(0, 3)); new_val = bluetf.getText();} //to keep number at 3 digits MAX
 				if(Integer.parseInt(new_val) > 255) {bluetf.setText("255"); new_val ="255";}//{new_val = "100";} //Sets the text field to 100 if number input is larger than that
 				if(new_val.charAt(0) == '0' && new_val.length() >= 2) {bluetf.setText(bluetf.getText().substring(1, new_val.length()));}
 				//Change the  color of the textfield label
