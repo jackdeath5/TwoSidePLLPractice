@@ -12,6 +12,8 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -349,6 +351,10 @@ public class TwoSidePLLPractice extends Application{
     private SimpleBooleanProperty sessionCICSwitch; //Boolean property used to switch between showing correct vs incorrect column
 
     private VBox sessions;
+    
+    private ErrorMessagePopup popupMessage;
+    
+    private Stage primary;
 
 	//Constructor
 	public TwoSidePLLPractice() {
@@ -1378,23 +1384,22 @@ public class TwoSidePLLPractice extends Application{
 	    SessionsDesc3.setFont(Font.font("Verdana", FontPosture.ITALIC, 8));
 	    SessionsDesc3.setTextFill(Color.rgb(175, 175, 175)); //sets the text light gray
 	    
-		Button saveSession = new Button("Save as...");
+		Button saveSession = new Button("Export...");
 		saveSession.setOnAction(e -> {
 			try {
 				writeSessionToFile();
-//			} catch (IOException e1) {
 			} catch (Exception e1) {
+				popupMessage.show(e1.getMessage());
 				System.out.println("Unable to save file.");
 			}
 		});
-		Button loadSession = new Button("Open File...");
+		Button loadSession = new Button("Import...");
 		loadSession.setOnAction(e -> {
 			try {
-				System.out.println("Reading File: ");
 				readSessionFromFile();
-//			} catch (FileNotFoundException e1) {
 			} catch (Exception e1) {
-				System.out.println(e1.getMessage());
+//				System.out.println(e1.getMessage());
+				popupMessage.show(e1.getMessage());
 				System.out.println("Unable to load file.");
 			}
 		});
@@ -2903,6 +2908,7 @@ public class TwoSidePLLPractice extends Application{
 
 	@Override
 	public void start(Stage primary) {
+		this.primary = primary;
 		newColors();
 		createCaseSelect();
 		createButtonActions(); //Moved to own method for to simplify start
@@ -2918,6 +2924,9 @@ public class TwoSidePLLPractice extends Application{
 		primary.getIcons().add(new Image("R2Perm32x32-1.png"));
 		primary.setResizable(false); //Make the window non-resizable
 		//Maybe add something for the icon
+		
+		popupMessage = new ErrorMessagePopup(primary);
+		
 		primary.show();
 	} //END OF START
 
@@ -3332,36 +3341,39 @@ public class TwoSidePLLPractice extends Application{
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("Text Files", "*.txt"));
 		fileChooser.setInitialFileName("PLLSessionSave.txt");
 		
-		File saveFile = fileChooser.showSaveDialog(new Stage());
+//		File saveFile = fileChooser.showSaveDialog(new Stage());
+		File saveFile = fileChooser.showSaveDialog(primary);
 		
-//		PrintStream fileWriter = new PrintStream(new File(fileName));
-		PrintStream fileWriter = new PrintStream(saveFile);
-		
-		//SAVE COLORS OF CUBE FIRST w r b g o y
-		fileWriter.println("+" + initWhite.getRedInt() + "," + initWhite.getGreenInt() + "," + initWhite.getBlueInt() + /*"," + */
-				"\n+" + initRed.getRedInt() + "," + initRed.getGreenInt() + "," + initRed.getBlueInt() + /*"," + */
-				"\n+" + initBlue.getRedInt() + "," + initBlue.getGreenInt() + "," + initBlue.getBlueInt() + /*"," + */
-				"\n+" + initGreen.getRedInt() + "," + initGreen.getGreenInt() + "," + initGreen.getBlueInt() + /*"," + */
-				"\n+" + initOrange.getRedInt() + "," + initOrange.getGreenInt() + "," + initOrange.getBlueInt() + /*"," + */
-				"\n+" + initYellow.getRedInt() + "," + initYellow.getGreenInt() + "," + initYellow.getBlueInt() /*+ ","*/);
-		
-		System.out.println("+" + initWhite.getRedInt() + "," + initWhite.getGreenInt() + "," + initWhite.getBlueInt() + /*"," + */
-				"\n+" + initRed.getRedInt() + "," + initRed.getGreenInt() + "," + initRed.getBlueInt() + /*"," + */
-				"\n+" + initBlue.getRedInt() + "," + initBlue.getGreenInt() + "," + initBlue.getBlueInt() + /*"," + */
-				"\n+" + initGreen.getRedInt() + "," + initGreen.getGreenInt() + "," + initGreen.getBlueInt() + /*"," + */
-				"\n+" + initOrange.getRedInt() + "," + initOrange.getGreenInt() + "," + initOrange.getBlueInt() + /*"," + */
-				"\n+" + initYellow.getRedInt() + "," + initYellow.getGreenInt() + "," + initYellow.getBlueInt() /*+ ","*/);
-		
-		for(int i = 0; i < simpCols.length; i++) {
-			System.out.println("*s" + simpCols[i].toString());
-			fileWriter.println("*s" + simpCols[i].toString());
+		if(saveFile != null) {
+//			PrintStream fileWriter = new PrintStream(new File(fileName));
+			PrintStream fileWriter = new PrintStream(saveFile);
+			
+			//SAVE COLORS OF CUBE FIRST w r b g o y
+			fileWriter.println("+" + initWhite.getRedInt() + "," + initWhite.getGreenInt() + "," + initWhite.getBlueInt() + /*"," + */
+					"\n+" + initRed.getRedInt() + "," + initRed.getGreenInt() + "," + initRed.getBlueInt() + /*"," + */
+					"\n+" + initBlue.getRedInt() + "," + initBlue.getGreenInt() + "," + initBlue.getBlueInt() + /*"," + */
+					"\n+" + initGreen.getRedInt() + "," + initGreen.getGreenInt() + "," + initGreen.getBlueInt() + /*"," + */
+					"\n+" + initOrange.getRedInt() + "," + initOrange.getGreenInt() + "," + initOrange.getBlueInt() + /*"," + */
+					"\n+" + initYellow.getRedInt() + "," + initYellow.getGreenInt() + "," + initYellow.getBlueInt() /*+ ","*/);
+			
+			System.out.println("+" + initWhite.getRedInt() + "," + initWhite.getGreenInt() + "," + initWhite.getBlueInt() + /*"," + */
+					"\n+" + initRed.getRedInt() + "," + initRed.getGreenInt() + "," + initRed.getBlueInt() + /*"," + */
+					"\n+" + initBlue.getRedInt() + "," + initBlue.getGreenInt() + "," + initBlue.getBlueInt() + /*"," + */
+					"\n+" + initGreen.getRedInt() + "," + initGreen.getGreenInt() + "," + initGreen.getBlueInt() + /*"," + */
+					"\n+" + initOrange.getRedInt() + "," + initOrange.getGreenInt() + "," + initOrange.getBlueInt() + /*"," + */
+					"\n+" + initYellow.getRedInt() + "," + initYellow.getGreenInt() + "," + initYellow.getBlueInt() /*+ ","*/);
+			
+			for(int i = 0; i < simpCols.length; i++) {
+				System.out.println("*s" + simpCols[i].toString());
+				fileWriter.println("*s" + simpCols[i].toString());
+			}
+			for(int i = 0; i < fullCols.length; i++) {
+				System.out.println("*f" + fullCols[i].toString());
+				fileWriter.println("*f" + fullCols[i].toString());
+			}
+			
+			fileWriter.close();
 		}
-		for(int i = 0; i < fullCols.length; i++) {
-			System.out.println("*f" + fullCols[i].toString());
-			fileWriter.println("*f" + fullCols[i].toString());
-		}
-		
-		fileWriter.close();
 	}
 	
 	/**
@@ -3373,83 +3385,86 @@ public class TwoSidePLLPractice extends Application{
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().add(new ExtensionFilter("Text Files", "*.txt"));
 		
-		File openFile = fileChooser.showOpenDialog(new Stage());
+		File openFile = fileChooser.showOpenDialog(primary);
 		
-		Scanner fileReader = new Scanner(new FileInputStream(openFile));
-		//Below ArrayLists are used to keep track of entries that have been changed from loading from the file
-		ArrayList<String> addedSimpEntries = new ArrayList<String>();
-		ArrayList<String> addedFullEntries = new ArrayList<String>();
-		
-		fileReader.useDelimiter("\\+");
-		String[] newColors = new String[6];
-		for(int i = 0; i < 6; i++) {
-			if(fileReader.hasNext()) {
-				newColors[i] = fileReader.nextLine().strip(); //used nextLine instead of next due to problems with last color including extra data
-			} else {
-				fileReader.close();
-				throw new IllegalArgumentException("Missing Cube Colors in file.");
+		if(openFile != null) {
+			Scanner fileReader = new Scanner(new FileInputStream(openFile));
+			//Below ArrayLists are used to keep track of entries that have been changed from loading from the file
+			ArrayList<String> addedSimpEntries = new ArrayList<String>();
+			ArrayList<String> addedFullEntries = new ArrayList<String>();
+			
+			fileReader.useDelimiter("\\+");
+			String[] newColors = new String[6];
+			for(int i = 0; i < 6; i++) {
+				if(fileReader.hasNext()) {
+					newColors[i] = fileReader.nextLine().strip(); //used nextLine instead of next due to problems with last color including extra data
+				} else {
+					fileReader.close();
+					throw new IllegalArgumentException("Missing Cube Colors in file.");
+				}
 			}
-		}
-		
-		try {
-			readColors(newColors);
-		} catch (Exception e) {
+			
+			try {
+				readColors(newColors);
+			} catch (Exception e) {
+				fileReader.close();
+	//			throw new IllegalArgumentException("Invalid Color(s) in file.");
+				throw new IllegalArgumentException(e.getMessage());
+	//			System.out.println("Failed to make colors");
+	//			e.printStackTrace();
+			}
+			
 			fileReader.close();
-//			throw new IllegalArgumentException("Invalid Color(s) in file.");
-			throw new IllegalArgumentException(e.getMessage());
-//			System.out.println("Failed to make colors");
-//			e.printStackTrace();
-		}
-		
-		fileReader.close();
-		fileReader = new Scanner(new FileInputStream(openFile));
-		
-		fileReader.useDelimiter("\\n[*]"); //("\\\n\\*[sf]\\*");
-		
-		System.out.println(fileReader.hasNext() + " " + fileReader.next());
-		
-		//Current Potential Issue:
-	//	What about the entries that are not changed? -- Reset to a new column with no data.
-	//	What about the same entry being put in multiple times? -- The last entry's data will be used.
-	//	Assumed that illegal entries are ignored -- IllegalArgumentException is thrown if illegal entries are detected.
-		
-		while(fileReader.hasNext()) {
-			String text = fileReader.next();
-			String outString = "";
-			if(text.substring(0,2).matches("s\\*")) {
-				System.out.println("SIMPLE: " + text.substring(2));
-				outString = readEntry(simpCols, text.substring(2));
-				if(!addedSimpEntries.contains(outString)) {
-					addedSimpEntries.add(outString);
+			fileReader = new Scanner(new FileInputStream(openFile));
+			
+			fileReader.useDelimiter("\\n[*]"); //("\\\n\\*[sf]\\*");
+			
+	//		System.out.println(fileReader.hasNext() + " " + fileReader.next());
+			fileReader.next(); //Skips the lines where cube colors are stored
+			
+			//Current Potential Issue:
+		//	What about the entries that are not changed? -- Reset to a new column with no data.
+		//	What about the same entry being put in multiple times? -- The last entry's data will be used.
+		//	Assumed that illegal entries are ignored -- IllegalArgumentException is thrown if illegal entries are detected.
+			
+			while(fileReader.hasNext()) {
+				String text = fileReader.next();
+				String outString = "";
+				if(text.substring(0,2).matches("s\\*")) {
+					System.out.println("SIMPLE: " + text.substring(2));
+					outString = readEntry(simpCols, text.substring(2));
+					if(!addedSimpEntries.contains(outString)) {
+						addedSimpEntries.add(outString);
+					}
+				} else if(text.substring(0,2).matches("f\\*")) {
+					System.out.println("FULL: " + text.substring(2));
+					outString = readEntry(fullCols, text.substring(2));
+					if(outString != null && !addedFullEntries.contains(outString)) {
+						addedFullEntries.add(outString);
+					}
+				} else {
+					fileReader.close();
+					throw new IllegalArgumentException("Invalid entries in file");
 				}
-			} else if(text.substring(0,2).matches("f\\*")) {
-				System.out.println("FULL: " + text.substring(2));
-				outString = readEntry(fullCols, text.substring(2));
-				if(outString != null && !addedFullEntries.contains(outString)) {
-					addedFullEntries.add(outString);
+			}
+			fileReader.close(); //FileReader closed because no longer needed.
+			
+			//Reset all non-changed columns in simple
+			for(int i = 0; i < simpCols.length; i++) {
+				if(!addedSimpEntries.contains(simpCols[i].getFullPermName())) {
+					simpCols[i].reset();
 				}
-			} else {
-				fileReader.close();
-				throw new IllegalArgumentException("Invalid entries in file");
 			}
-		}
-		fileReader.close(); //FileReader closed because no longer needed.
-		
-		//Reset all non-changed columns in simple
-		for(int i = 0; i < simpCols.length; i++) {
-			if(!addedSimpEntries.contains(simpCols[i].getFullPermName())) {
-				simpCols[i].reset();
+			
+			//Reset all non-changed columns in full
+			for(int i = 0; i < fullCols.length; i++) {
+				if(!addedFullEntries.contains(fullCols[i].getFullPermName())) {
+					fullCols[i].reset();
+				}
 			}
+			
+			updateSessionTables();
 		}
-		
-		//Reset all non-changed columns in full
-		for(int i = 0; i < fullCols.length; i++) {
-			if(!addedFullEntries.contains(fullCols[i].getFullPermName())) {
-				fullCols[i].reset();
-			}
-		}
-		
-		updateSessionTables();
 	}
 	
 	/**
@@ -3463,27 +3478,14 @@ public class TwoSidePLLPractice extends Application{
 			String[] splitVals = colors[i].split(",");
 			System.out.println(splitVals.length);
 			if(splitVals.length != 3) { //check to make sure only 3 numbers exist
-				for(int j = 0; j < splitVals.length; j++) {
-					System.out.println(splitVals[j]);
-				}
-				throw new IllegalArgumentException("Invalid Color(s) in file. 1");
+				throw new IllegalArgumentException("Invalid Color(s) in file.");
 			}
 			try {
 				System.out.println(splitVals[0] + " - " + splitVals[1] + " - " + splitVals[2]); //Problem is not stripping the \n off of last vals
 				colorVars[i].setColor(Integer.parseInt(splitVals[0]), Integer.parseInt(splitVals[1]), Integer.parseInt(splitVals[2]));
 			} catch (Exception e) { //Number format + whatever wrong values are thrown into the setColor
-				throw new IllegalArgumentException("Invalid Color(s) in file. 2");
+				throw new IllegalArgumentException("Illegal Color Value(s) in file.");
 			}
-			
-//			Scanner colorReader = new Scanner(colors[i]);
-//			colorReader.useDelimiter(",");
-//			try {
-//				colorVars[i].setColor(colorReader.nextInt(), colorReader.nextInt(), colorReader.nextInt());
-//			} catch (NoSuchElementException e) {
-//				colorReader.close();
-//				throw new IllegalArgumentException("Invalid Color in file.");
-//			}
-//			System.out.println("End of Color Changed.");
 		}
 	}
 		
