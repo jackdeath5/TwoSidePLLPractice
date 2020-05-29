@@ -708,6 +708,7 @@ public class TwoSidePLLPractice extends Application{
 
 		count = new HBox(new Label("Number of Cases: "),countBox); //HBox for selecting the number of times to do PLL
 		count.setAlignment(Pos.CENTER);
+//		count.setSpacing(0);
 
 		initWhite = new InitColor("White",250,246,228);
 		initRed = new InitColor("Red",173,8,4);
@@ -761,10 +762,37 @@ public class TwoSidePLLPractice extends Application{
 		VBox infoBox = new VBox(new Label(),keybindLabel,keybindLabel2,keybindLabel3,keybindLabel4,new Label(), info, link); //Empty label used as a simple spacer
 		infoBox.setAlignment(Pos.CENTER); //center things in the info box
 
+		//Used to load JUST THE COLORS of the cube without loading session data.
+		HBox colorsIOBox = new HBox();
+		colorsIOBox.setAlignment(Pos.CENTER);
+		Button loadColorsFromFile = new Button("Load Colors...");
+		loadColorsFromFile.setOnAction(e -> {
+			try {
+				loadColorsFromFile();
+			} catch (Exception e1) {
+				popupMessage.show(e1.getMessage());
+				System.out.println("Unable to load cube colors.");
+			}
+		});
+		Button saveColorsToFile = new Button("Save Colors...");
+		saveColorsToFile.setOnAction(e -> {
+			try {
+				writeColorsToFile();
+			} catch (Exception e1) {
+				popupMessage.show(e1.getMessage());
+				System.out.println("Unable to save cube colors.");
+			}
+		});
+		colorsIOBox.getChildren().addAll(loadColorsFromFile, saveColorsToFile);
+//		colorsIOBox.setSpacing(165); //SETUP 5
+		colorsIOBox.setSpacing(50);
+		
 		initial = new VBox();
 		initial.setAlignment(Pos.CENTER);
 		initial.getChildren().addAll(titleBox,modes,cross,difficulties,count,initWhite,initRed,initBlue,initGreen,
-									 initOrange,initYellow,new Label(),startBox,infoBox); //Initial menu over-arching VBox
+									 initOrange,initYellow,new Label(),colorsIOBox,new Label(),startBox,infoBox); //Initial menu over-arching VBox
+//		initial.getChildren().addAll(titleBox,modes,cross,difficulties,count,colorsIOBox,initWhite,initRed,initBlue,initGreen,
+//				 initOrange,initYellow,new Label(),startBox,infoBox); //Initial menu over-arching VBox //SETUP 5
 
 		//Added the empty label new Label() as a spacer for simplicity
 
@@ -1403,9 +1431,66 @@ public class TwoSidePLLPractice extends Application{
 				System.out.println("Unable to load file.");
 			}
 		});
-		HBox sessionIOBox = new HBox(saveSession, loadSession);
+		
+//		//The reset button that resets the stats for the session
+//		Button resetSession = new Button("Reset");
+//	///
+//		Popup resetPopup = new Popup();
+//		resetPopup.setAutoHide(true);
+//		VBox resetPopupVbox = new VBox();
+//		resetPopupVbox.setAlignment(Pos.CENTER);
+//		resetPopupVbox.setSpacing(10);
+//		Label resetPopupLabel = new Label("Are you sure you want to reset ALL\n"
+//				+ "of the stats of the current session?");
+//		//CHANGE LABEL FONT HERE IF NECESSARY
+//		Button resetPopupExitButton = new Button("No");
+//		
+//		resetPopupExitButton.setOnAction(e1 -> {
+//			resetPopup.hide();
+//		});
+//		
+//		Button resetButton = new Button("Yes");
+//		
+//		resetButton.setOnAction(e1 -> {
+//			//Reset all columns in simple
+//			for(int i = 0; i < simpCols.length; i++) {
+//					simpCols[i].reset();
+//			}
+//			
+//			//Reset all non-changed columns in full
+//			for(int i = 0; i < fullCols.length; i++) {
+//					fullCols[i].reset();
+//			}
+//			
+//			resetPopup.hide();
+//			this.updateSessionTables();
+//			popupMessage.show("Reset all session statistics!", primary.getX() + primary.getWidth() / 5 + 20, primary.getY() + primary.getHeight() / 3);
+//		});
+//		HBox resetPopupButtonsHbox = new HBox();
+//		resetPopupButtonsHbox.getChildren().addAll(resetButton, resetPopupExitButton);
+//		resetPopupButtonsHbox.setAlignment(Pos.CENTER);
+//		resetPopupButtonsHbox.setSpacing(50);
+//		resetPopupVbox.getChildren().addAll(resetPopupLabel, resetPopupButtonsHbox);
+//		resetPopupVbox.setStyle("-fx-background-color: rgb(244, 244, 244);"
+//					+ "-fx-background-radius: 10px;" //Radius of background around corners
+//					+ "-fx-border-radius: 10px;\r\n" //Radius of border around corners - make same as ^
+//					+ "-fx-border-width: 5px;\r\n" //Thickness of border
+//					+ "-fx-border-color: black;" //Makes round border black
+//					+ "-fx-padding: 10px;"); //Extra distance between stuff and borders 
+//		resetPopup.getContent().add(resetPopupVbox);
+//		
+//	///
+//		resetSession.setOnAction(e -> {
+//			resetPopup.setAnchorX(primary.getX() /*- this.getWidth() / 2*/ + primary.getWidth() / 5 /*- 10*/);
+//			resetPopup.setAnchorY(primary.getY() /*- this.getHeight() / 2*/ + primary.getHeight() / 3);
+//			resetPopup.show(primary);
+//		});
+		
+//		HBox sessionIOBox = new HBox(loadSession, resetSession, saveSession);
+		HBox sessionIOBox = new HBox(loadSession, saveSession);
 		sessionIOBox.setAlignment(Pos.CENTER); //Centers the elements inside the HBox
-		sessionIOBox.setSpacing(195); //Spaces the 2 buttons apart
+		sessionIOBox.setSpacing(215); //Spaces the 2 buttons apart -- BEFORE RESET BUTTON
+//		sessionIOBox.setSpacing(85); //Spaces the 3 buttons apart
 
 	    sessions = new VBox();
 	    HBox sessionsBox = new HBox();
@@ -1702,18 +1787,6 @@ public class TwoSidePLLPractice extends Application{
 		Label caseSelectionTitle = new Label("Case Selection");
 		caseSelectionTitle.setFont(Font.font("Verdana", FontWeight.BOLD, 18)); //Makes the font bigger and bolded
 
-		//Select all button
-		Button allButton = new Button("Select All");
-		allButton.setOnAction( e -> {
-			for(SetCaseBox c: caseSelectArray) {c.setSelected(true);} //Sets everything to be selected
-		});
-
-		//Select None button
-		Button noneButton = new Button("Select None");
-		noneButton.setOnAction( e -> {
-			for(SetCaseBox c: caseSelectArray) {c.setSelected(false);} //Sets everything to be selected
-		});
-
 		//Scrollpane with stuff here
 		ScrollPane cssp = new ScrollPane();
 		cssp.setFitToWidth(true);
@@ -1768,11 +1841,192 @@ public class TwoSidePLLPractice extends Application{
 				Y,
 				Z
 		)); //End of adding different cases to the scrollpane
+		
+		//Setup Preset Selection
+		HBox presets1 = new HBox();
+		HBox presets2 = new HBox();
+		
+		//H; SKIP; U1; U2; Z;
+		CasesPresetCheckBox epll = new CasesPresetCheckBox(" EPLL ", new SetCaseBox[] {
+				caseSelectArray[32],caseSelectArray[33],caseSelectArray[34],caseSelectArray[35], //H
+				caseSelectArray[60],caseSelectArray[61],caseSelectArray[62],caseSelectArray[63], //Skip
+				caseSelectArray[68],caseSelectArray[69],caseSelectArray[70],caseSelectArray[71], //U1
+				caseSelectArray[72],caseSelectArray[73],caseSelectArray[74],caseSelectArray[75], //U2
+				caseSelectArray[84],caseSelectArray[85],caseSelectArray[86],caseSelectArray[87] //Z
+				}); //20 cases
+		
+		//E; N1; N2; V; Y;
+		CasesPresetCheckBox dicp = new CasesPresetCheckBox("DiagCP", new SetCaseBox[] {
+				caseSelectArray[8],caseSelectArray[9],caseSelectArray[10],caseSelectArray[11], //E
+				caseSelectArray[44],caseSelectArray[45],caseSelectArray[46],caseSelectArray[47], //N1
+				caseSelectArray[48],caseSelectArray[49],caseSelectArray[50],caseSelectArray[51], //N2
+				caseSelectArray[76],caseSelectArray[77],caseSelectArray[78],caseSelectArray[79], //V
+				caseSelectArray[80],caseSelectArray[81],caseSelectArray[82],caseSelectArray[83] //Y
+				}); //20 cases
+		
+		//A1-1; A2-1; J1; J2;
+		CasesPresetCheckBox acpa = new CasesPresetCheckBox("CP - A", new SetCaseBox[] {
+				caseSelectArray[0], //A1-1
+				caseSelectArray[4], //A2-1
+				caseSelectArray[36],caseSelectArray[37],caseSelectArray[38],caseSelectArray[39], //J1
+				caseSelectArray[40],caseSelectArray[41],caseSelectArray[42],caseSelectArray[43] //J2
+				}); //10 Cases
+		//A1-4; A2-2; G1-4; G3-3; T3,T4; R1-1; R2-4
+		CasesPresetCheckBox acpb = new CasesPresetCheckBox("CP - B", new SetCaseBox[] {
+				caseSelectArray[3], //A1-4
+				caseSelectArray[5], //A2-2
+				caseSelectArray[19], //G1-4
+				caseSelectArray[26], //G3-3
+				caseSelectArray[66],caseSelectArray[67], //T3,T4
+				caseSelectArray[52], //R1-1
+				caseSelectArray[59] //R2-4
+				}); //8 Cases
+		//A1-2; A2-4; F2,F3; G1-1; G2-1,G2-2; G3-2; G4-1,G4-2; R1-2; R2-3; T1,T2;
+		CasesPresetCheckBox acpc = new CasesPresetCheckBox("CP - C", new SetCaseBox[] {
+				caseSelectArray[1], //A1-2
+				caseSelectArray[7], //A2-4
+				caseSelectArray[13],caseSelectArray[14], //F2,F3
+				caseSelectArray[16], //G1-1
+				caseSelectArray[20],caseSelectArray[21], //G2-1,G2-2
+				caseSelectArray[25], //G3-2
+				caseSelectArray[28],caseSelectArray[29], //G4-1,G4-2
+				caseSelectArray[53], //R1-2
+				caseSelectArray[58], //R2-3
+				caseSelectArray[64],caseSelectArray[65] //T1,T2
+				}); //14 Cases
+		//A1-3; A2-3; G1-3; G2-3,G2-4; G3-4; G4-3,G4-4; R1-4; R2-1;
+		CasesPresetCheckBox acpd = new CasesPresetCheckBox("CP - D", new SetCaseBox[] {
+				caseSelectArray[2], //A1-3
+				caseSelectArray[6], //A2-3
+				caseSelectArray[18], //G1-3
+				caseSelectArray[22],caseSelectArray[23], //G2-3,G2-4
+				caseSelectArray[27], //G3-4
+				caseSelectArray[30],caseSelectArray[31], //G4-3,G4-4
+				caseSelectArray[55], //R1-4
+				caseSelectArray[56] //R2-1
+				}); //10 Cases
+		//F1,F4; G1-2; G3-1; R1-3; R2-2;
+		CasesPresetCheckBox acpe = new CasesPresetCheckBox("CP - E", new SetCaseBox[] {
+				caseSelectArray[12],caseSelectArray[15], //F1,F4
+				caseSelectArray[17], //G1-2
+				caseSelectArray[24], //G3-1
+				caseSelectArray[54], //R1-3
+				caseSelectArray[57] //R2-2
+				}); //6 Cases
 
-		//Setup the HBox with the buttons
-		HBox buttonsBox = new HBox(allButton,noneButton);//,expandButton,retractButton); //Creates the HBox
-		buttonsBox.setAlignment(Pos.CENTER); //center aligns the HBox
-		buttonsBox.setSpacing(50);//20); //Spacing between the buttons
+		//Select all button
+		Button allButton = new Button("Select All");
+		allButton.setOnAction( e -> {
+			for(SetCaseBox c: caseSelectArray) {c.setSelected(true);} //Sets everything to be selected
+			epll.setSelected(true); //Sets all presets to on
+			dicp.setSelected(true);
+			acpa.setSelected(true);
+			acpb.setSelected(true);
+			acpc.setSelected(true);
+			acpd.setSelected(true);
+			acpe.setSelected(true);
+		});
+
+		//Select None button
+		Button noneButton = new Button("Select None");
+		noneButton.setOnAction( e -> {
+			for(SetCaseBox c: caseSelectArray) {c.setSelected(false);} //Sets everything to be unselected
+			epll.setSelected(false); //Sets all presets to off
+			dicp.setSelected(false);
+			acpa.setSelected(false);
+			acpb.setSelected(false);
+			acpc.setSelected(false);
+			acpd.setSelected(false);
+			acpe.setSelected(false);
+		});
+		
+		//Setup the pop-up for the legend 
+		Popup legendPopup = new Popup();
+		legendPopup.setAutoHide(true);
+		
+		Label epllT = new Label("EPLL");
+		epllT.setFont(Font.font("Verdana", FontWeight.BOLD, 14)); //Makes the font bigger and bolded
+		Label epllD = new Label("- Corners correctly placed"
+				+ "\n- H, SKIP, Ua, Ub, H");
+		Label dicpT = new Label("Diag. CP");
+		dicpT.setFont(Font.font("Verdana", FontWeight.BOLD, 14)); //Makes the font bigger and bolded
+		Label dicpD = new Label("- Diagonal block movement"
+				+ "\n- E, N1, N2, V, Y");
+		Label acpaT = new Label("Adj. CP - A");
+		acpaT.setFont(Font.font("Verdana", FontWeight.BOLD, 14)); //Makes the font bigger and bolded
+		Label acpaD = new Label("- No headlights, two blocks"
+				+ "\n- A1-1, A2-1, J1, J2");
+		Label acpbT = new Label("Adj. CP - B");
+		acpbT.setFont(Font.font("Verdana", FontWeight.BOLD, 14)); //Makes the font bigger and bolded
+		Label acpbD = new Label("- Headlights, one block"
+				+ "\n- A1-4, A2-2, G1-4, G3-3, T3, T4, R1-1, R2-4");
+		Label acpcT = new Label("Adj. CP - C");
+		acpcT.setFont(Font.font("Verdana", FontWeight.BOLD, 14)); //Makes the font bigger and bolded
+		Label acpcD = new Label("- No headlights, one block"
+				+ "\n- A1-2, A2-4, F2, F3, G1-1, G2-1, G2-2, "
+				+ "\n  G3-2, G4-1, G4-2, R1-2, R2-3, T1, T2");
+		Label acpdT = new Label("Adj. CP - D");
+		acpdT.setFont(Font.font("Verdana", FontWeight.BOLD, 14)); //Makes the font bigger and bolded
+		Label acpdD = new Label("- Headlights, no blocks"
+				+ "\n- A1-3, A2-3, G1-3, G2-3, G2-4, G3-4, G4-3, "
+				+ "\n  G4-4, R1-4, R2-1");
+		Label acpeT = new Label("Adj. CP - E");
+		acpeT.setFont(Font.font("Verdana", FontWeight.BOLD, 14)); //Makes the font bigger and bolded
+		Label acpeD = new Label("- No headlights, no blocks"
+				+ "\n- F1 , F4, G1-2, G3-1, R1-3, R2-2");
+		
+		Button exitButton = new Button("Close");
+		
+		exitButton.setOnAction(e -> {
+			legendPopup.hide();
+		});
+		
+		Label attributionLabel = new Label("Categories setup as organized on:");
+		attributionLabel.setFont(Font.font("Verdana", FontPosture.ITALIC, 11));
+		attributionLabel.setTextFill(Color.rgb(150, 150, 150));
+		Hyperlink attributionLink = new Hyperlink("Sarah's Cubing Site");
+		attributionLink.setOnAction( e -> getHostServices().showDocument("https://sarah.cubing.net/3x3x3/pll-recognition-guide")); //Makes the hyperlink clickable
+		attributionLink.setFont(Font.font("Verdana", FontPosture.ITALIC, 11));
+		attributionLink.setTextFill(Color.rgb(150, 150, 150));
+		attributionLink.setUnderline(true); //Underlines the text
+		
+		VBox attributionBox = new VBox(attributionLabel, attributionLink);
+		attributionBox.setAlignment(Pos.CENTER);
+		attributionBox.setSpacing(0);
+		
+		
+		VBox legendVbox = new VBox(epllT, epllD, dicpT, dicpD, acpaT, acpaD,
+				acpbT, acpbD, acpcT, acpcD, acpdT, acpdD, acpeT, acpeD, exitButton, attributionBox);
+		legendVbox.setAlignment(Pos.CENTER);
+		legendVbox.setSpacing(5);
+		
+		legendVbox.setStyle("-fx-background-color: rgb(244, 244, 244);"
+					+ "-fx-background-radius: 10px;" //Radius of background around corners
+					+ "-fx-border-radius: 10px;\r\n" //Radius of border around corners - make same as ^
+					+ "-fx-border-width: 5px;\r\n" //Thickness of border
+					+ "-fx-border-color: black;" //Makes round border black
+					+ "-fx-padding: 10px;"); //Extra distance between stuff and borders 
+		legendPopup.getContent().add(legendVbox);
+		
+		Button presetsKey = new Button("Legend");
+		presetsKey.setOnAction(e -> {
+			legendPopup.setAnchorX(primary.getX() + 53);
+			legendPopup.setAnchorY(primary.getY() + 20);
+			legendPopup.show(primary);
+		});
+		
+		presets1.setAlignment(Pos.CENTER);
+		presets1.getChildren().setAll(epll, allButton, presetsKey, noneButton, dicp);
+		presets1.setSpacing(5);
+		
+		presets2.setAlignment(Pos.CENTER);
+		presets2.getChildren().setAll(acpa, acpb, acpc, acpd, acpe);
+		presets2.setSpacing(16);
+
+		//Setup the HBox with the buttons -- buttons moved to presets1
+//		HBox buttonsBox = new HBox(allButton,noneButton);//,expandButton,retractButton); //Creates the HBox
+//		buttonsBox.setAlignment(Pos.CENTER); //center aligns the HBox
+//		buttonsBox.setSpacing(50);//20); //Spacing between the buttons
 
 		Label errorLabel = new Label("** There is nothing being tested! **");
 		Label errorLabel2 = new Label("** Please select at least 1 case to continue **");
@@ -1783,8 +2037,10 @@ public class TwoSidePLLPractice extends Application{
 
 		Button returnButton = new Button("Main Menu");
 
-		caseSelection.getChildren().addAll(caseSelectionTitle,new Label(),buttonsBox,cssp,new Label(),returnButton,new Label());
 		//new Label()s is used as a simple spacer
+//		caseSelection.getChildren().addAll(caseSelectionTitle,new Label(),buttonsBox,cssp,new Label(),returnButton,new Label());
+		caseSelection.getChildren().addAll(caseSelectionTitle,presets1,presets2,cssp,new Label(),returnButton,new Label());
+		
 
 		returnButton.setOnAction( e -> {
 //			for(SimpleBooleanProperty b: new SimpleBooleanProperty[] {A11,A12,A13,A14,A21,A22,A23,A24,E1,E2,E3,E4,
@@ -3076,6 +3332,53 @@ public class TwoSidePLLPractice extends Application{
 		}
 
 	} //END OF SetCaseBox
+	
+////////////////////////////////////////////////////////////////
+	
+	public class CasesPresetCheckBox extends CheckBox{
+		//Preset cases will only leave the cases checked for whichever preset checkboxes are active
+		//After the preset(s) are chosen, other cases can be set by clicking them. Otherwise, they will be reset upon a click of the preset.
+		
+		//Must call outer method to set everything
+		//Inner list contains cases it has
+		
+		SetCaseBox[] cases;
+		
+		/**
+		 * Creates a case preset checkbox, which is used to set presets for cases in the Case Select menu.
+		 * @param preset
+		 * @param cases
+		 */
+		public CasesPresetCheckBox(String preset, SetCaseBox[] cases) {
+			super(preset);
+			this.cases = cases;
+			this.setSelected(true); //is selected by default
+			
+			this.setOnAction(e -> {
+//				System.out.println(preset + " is checked? " + this.isSelected());
+				for(int i = 0; i < this.cases.length; i++) { //sets all of the cases to what it
+					this.cases[i].setSelected(this.isSelected());
+				}
+				
+			});
+		}
+		
+//		public void updateCasesFromPresets() {
+//			
+//		}
+		
+		
+//		//Method to modify the checkbox
+//		public void setSelected(boolean bool) {
+//			caseBox.setSelected(bool);
+//		}
+//
+//		public boolean getCaseBool() {
+//			return caseBool.get();
+//		}
+
+		
+	}
 
 ////////////////////////////////////////////////////////////////
 
@@ -3335,6 +3638,98 @@ public class TwoSidePLLPractice extends Application{
 
 ///////////////////////////////////////////////////////////////
 	
+	public void writeColorsToFile() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("Text Files", "*.txt"));
+		fileChooser.setInitialFileName("PLLSessionSave.txt");
+		
+//		File saveFile = fileChooser.showSaveDialog(new Stage());
+		File saveFile = fileChooser.showSaveDialog(primary);
+		
+		if(saveFile != null) {
+			//temporarily save contents of other file
+			String tempString = "";
+			try {
+				Scanner tempWriter = new Scanner(saveFile);
+				
+				for(int i = 0; i < 6; i++) { //skips the first 6 lines, which will be overwritten with the new colors.
+					if(tempWriter.hasNextLine()) {
+						tempWriter.nextLine();
+					}
+				}
+				while(tempWriter.hasNextLine()) { //adds an extra \n at the end of the file
+					String temp = tempWriter.nextLine();
+					if(!temp.isBlank()) {
+						tempString += temp.strip() + "\n";
+					}
+				}
+				tempString = tempString.substring(0, tempString.length() - 1); //Removes the extra \n
+				tempWriter.close();
+			} catch (FileNotFoundException e) {
+				throw new IllegalArgumentException("Unable to write colors to file.");
+			}
+			
+			try {
+				PrintStream fileWriter = new PrintStream(saveFile);
+				
+				fileWriter.println("+" + initWhite.getRedInt() + "," + initWhite.getGreenInt() + "," + initWhite.getBlueInt() + /*"," + */
+						"\n+" + initRed.getRedInt() + "," + initRed.getGreenInt() + "," + initRed.getBlueInt() + /*"," + */
+						"\n+" + initBlue.getRedInt() + "," + initBlue.getGreenInt() + "," + initBlue.getBlueInt() + /*"," + */
+						"\n+" + initGreen.getRedInt() + "," + initGreen.getGreenInt() + "," + initGreen.getBlueInt() + /*"," + */
+						"\n+" + initOrange.getRedInt() + "," + initOrange.getGreenInt() + "," + initOrange.getBlueInt() + /*"," + */
+						"\n+" + initYellow.getRedInt() + "," + initYellow.getGreenInt() + "," + initYellow.getBlueInt() /*+ ","*/);
+				
+				System.out.println("+" + initWhite.getRedInt() + "," + initWhite.getGreenInt() + "," + initWhite.getBlueInt() + /*"," + */
+						"\n+" + initRed.getRedInt() + "," + initRed.getGreenInt() + "," + initRed.getBlueInt() + /*"," + */
+						"\n+" + initBlue.getRedInt() + "," + initBlue.getGreenInt() + "," + initBlue.getBlueInt() + /*"," + */
+						"\n+" + initGreen.getRedInt() + "," + initGreen.getGreenInt() + "," + initGreen.getBlueInt() + /*"," + */
+						"\n+" + initOrange.getRedInt() + "," + initOrange.getGreenInt() + "," + initOrange.getBlueInt() + /*"," + */
+						"\n+" + initYellow.getRedInt() + "," + initYellow.getGreenInt() + "," + initYellow.getBlueInt() /*+ ","*/);
+				
+				fileWriter.println(tempString);
+				System.out.println(tempString);
+				fileWriter.close();
+			} catch (FileNotFoundException e) {
+				throw new IllegalArgumentException("Unable to write colors to file.");
+			}
+		}
+	}
+	
+	public void loadColorsFromFile() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("Text Files", "*.txt"));
+		
+		File openFile = fileChooser.showOpenDialog(primary);
+		
+		if(openFile != null) {
+			try {
+				Scanner fileReader = new Scanner(new FileInputStream(openFile));
+				
+				fileReader.useDelimiter("\\+");
+				String[] newColors = new String[6];
+				for(int i = 0; i < 6; i++) {
+					if(fileReader.hasNext()) {
+						newColors[i] = fileReader.nextLine().strip(); //used nextLine instead of next due to problems with last color including extra data
+					} else {
+						fileReader.close();
+						throw new IllegalArgumentException("Missing Cube Colors in file.");
+					}
+				}
+				
+				try {
+					readColors(newColors);
+				} catch (Exception e) {
+					fileReader.close();
+					throw new IllegalArgumentException(e.getMessage());
+				}
+				
+				fileReader.close();
+			} catch (FileNotFoundException e) {
+				throw new IllegalArgumentException("Unable to load colors from file.");
+			}
+		}
+	}
+	
 	public void writeSessionToFile() throws IOException {
 		
 		FileChooser fileChooser = new FileChooser();
@@ -3377,7 +3772,7 @@ public class TwoSidePLLPractice extends Application{
 	}
 	
 	/**
-	 * 
+	 * Reads both cube colors and session stats for both simple and full from a save file.
 	 * @throws FileNotFoundException
 	 * @throws IllegalArgumentException
 	 */
@@ -3542,7 +3937,7 @@ public class TwoSidePLLPractice extends Application{
 			}
 			for(int i = 0; i < newWrongGuesses.length; i++) { //check to make sure all wrong guesses are WRONG and VALID
 				System.out.println(newWrongGuesses.length);
-				if(fullCaseName.equals(newWrongGuesses[i]) || !TwoSidePLLPractice.isValidSimpCaseName(newWrongGuesses[i])) {
+				if(fullCaseName.substring(fullCaseName.length() - 2).equals(newWrongGuesses[i]) || !TwoSidePLLPractice.isValidSimpCaseName(newWrongGuesses[i])) {
 					//PROBLEM: fullCaseName will NEVER equal wrongGuess, because wrongGuess is SIMPLE and NOT FULL.
 //					System.out.println("Invalid case detected in file: " + newWrongGuesses[i]);
 					throw new IllegalArgumentException("Illegal Wrong Guess Case in file.");

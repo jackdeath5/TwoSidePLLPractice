@@ -68,23 +68,14 @@ public class ErrorMessagePopup extends Popup /*PopupWindow*/ {
 //		stage.setScene(new Scene(bp, 100, 100));
 //		super.show(testStage, 0, 0);
 	}
-
-//	@Override
-//	public void start(Stage primary) {
-//		BorderPane
-//
-//		bp.setCenter(initial); //Sets the initial menu
-//
-//		Scene s = new Scene(bp,screenWidth,screenLength);
-//
-//		primary.setScene(s);
-//		primary.setTitle("2-Side PLL Practice");
-//		primary.getIcons().add(new Image("R2Perm32x32-1.png"));
-//		primary.setResizable(false); //Make the window non-resizable
-//		//Maybe add something for the icon
-//		primary.show();
-//	} //END OF START
-//	
-//	public static void main(String[] args) {launch(args);}
+	
+	//Same thing as the previous show, but has a custom input X and Y value
+	public void show(String message, double x, double y) {
+		//Positioning
+		this.setAnchorX(x);
+		this.setAnchorY(y);
+		errorLabel.setText(message);
+		super.show(stage);
+	}
 	
 }
