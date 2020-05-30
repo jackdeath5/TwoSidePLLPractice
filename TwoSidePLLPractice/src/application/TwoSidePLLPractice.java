@@ -1682,6 +1682,9 @@ public class TwoSidePLLPractice extends Application{
 		///////////////////////////////////////////////////
 
 			startButton.setOnAction( e -> {
+				if(countBox.getText().equals("0")) {
+					countBox.setText("1");
+				}
 				startTesting(); //Made into its own function since this was pretty big
 			});
 
