@@ -9,3 +9,23 @@ Practicing it though, is a completely different story. Sure, there's some **free
 
 ### Sidenote
 To those who actually know how to code and have a lot of experience with it, I just want you to know that I coded the bulk of this before starting college, and so I didn't javadoc everything like I should have. Coming back to this to add a few more things after a year in college, I'm now regretting it. I'm sorry, but I learned to code by throwing in a bunch of comments to describe things going on in the code instead of Javadocing everything. I'll try to add the Javadoc as time goes on, I just decided to post this to get it out to people because my schedule is about to get a bit more busy. So, I apologize to anybody attempting to do this early on after the initial posting about the mountain of comments and code they'll need to go through to understand what's going on.
+
+## How to Use
+
+![Main Menu](TwoSidePLLPractice/images/Main Menu.PNG)
+
+So this is the main menu. This is what you open up to when you run the application. You can select what you want to do from here. You can select the mode, choose you cross color, choose the difficulty, set how many cases you want to be tested on, and what colors you want your cube to be.
+
+### Mode
+The mode could either be **normal** or **debug**.
+- The **normal** mode is the mode you will probably be on most of, if not all of the time. In this mode, random PLLs based those selected in the *Select Cases* menu. The cube colors abide by the cross color chosen. The cube colors will match those set on the menu.
+- The debug setup is essentially the testing setup without the testing. It outputs stuff into the console about what's going on. It has a menu bar at the top where you can decide what actions to do. You can also change the colors of the cube and see how they look on the cube after you change them, if that will help you pick colors better. You can also experiment and see how it looks on different permutations by clicking the menu option that generates a PLL. A new case will randomize the PLL and the colors of the cube while still abiding by the selected cross from the menu.
+### Cross Color
+With this setting, you can choose your cross color. You can set your cross color to ANY of the 6 colors on the cube. You can even set it to be color neutral (actually that's what it defaults to because I'm color neutral, but that's besides the point). By setting the cross color, the cube and PLL cases are shown to you in a way such that its colors will line up like the cross color is on the bottom. Meaning, that if you set the cross color to white, you will always have yellow on top.
+### Difficulty
+Difficulty, (the best term I could use for it), could either be **simple** or **full**. The difficulty basically changes what PLLs you could guess. I think it's best to use an example to describe this:
+Say your given a case that you recognize to be an R-perm. For **simple**, you only need to answer **R** because you know it's an R-perm. For **full**, you would need to differentiate between an **R1/Ra** and **R2/Rb** and answer with one of those instead. Stats are tracked individually for each difficulty, and you can easily check them both in the *Session Stats* menu. More on this later.
+### Number of Cases
+This number is the number of cases you can set for a single quiz session. Right now, I have it set to be a number between 1-999, because I don't know why you would need to do more than 999 at a time, because it seems like it would be a nightmare going through results. Also, don't have a pause function implemented, because I feel like it would be weird starting back in. So, choose your case numbers wisely. Furthermore, stats are saved cumulatively in *Session Stats* so I don't see there being much of a point.
+### Cube Colors
+Cube colors are RGB values, and can be switched individually by changing their indiviudal RGB values. Changing the values here will not only be changed when testing, but will also be changed for the cubes when look in the *Select Cases* menu and when you go into debug. You can load colors from a file and save them to a file. **If you want to update the cube colors for a saved session file (more on this later), replace the file. It will change the cube colors in that file, and keep all of the session data intact.**
