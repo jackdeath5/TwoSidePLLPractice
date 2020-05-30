@@ -2482,9 +2482,11 @@ public class TwoSidePLLPractice extends Application{
 		else {menubarwidth = 0;}
 
 		simpleGP.setPrefSize(screenWidth, screenLength-cubeCanvasLength-menubarwidth);//-25);//screenLength-cubeCanvasLength-25,screenWidth);
+		//+ 10 added to ^ in java 8 release version due to gap being created somehow when switching java versions
 		simpleGP.setHgap(0.05*screenWidth);
 
 		fullGP.setPrefSize(screenWidth, screenLength-cubeCanvasLength-menubarwidth);//-25);//screenLength-cubeCanvasLength-25,screenWidth);
+		//+ 10 added to ^ in java 8 release version due to gap being created somehow when switching java versions
 		fullGP.setHgap(0.05*screenWidth);
 
 	//	System.out.printf("%sx%s ;; %sx%s", simpleGP.getPrefWidth(),simpleGP.getPrefHeight(),fullGP.getPrefWidth(),fullGP.getPrefHeight());
