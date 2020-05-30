@@ -2340,9 +2340,10 @@ public class TwoSidePLLPractice extends Application{
 	}
 
 	public void drawTimer() {
-		double timerSize = 75*scale; //MODIFY THIS TO CHANGE THE SIZE OF THE TIMER
+//		double timerSize = 75*scale; //MODIFY THIS TO CHANGE THE SIZE OF THE TIMER //DEPRECATED
 		cubePen.setFill(Color.WHITE);
-        cubePen.fillRect(40.0*cubeCanvas.getWidth()/100.0, 18.0*cubeCanvas.getHeight()/20.0, timerSize, 2.0*cubeCanvas.getHeight()/20.0);
+//        cubePen.fillRect(40.0*cubeCanvas.getWidth()/100.0, 18.0*cubeCanvas.getHeight()/20.0, timerSize, 2.0*cubeCanvas.getHeight()/20.0); //DEPRECATED
+        cubePen.fillRect(0.0, 18.0*cubeCanvas.getHeight()/20.0, cubeCanvas.getWidth(), 2.0*cubeCanvas.getHeight()/20.0); //Fixed. Now should cover all values
         cubePen.setFill(Color.BLACK);
         cubePen.setFont(new Font(18.0*scale)); //test font size at 18
         cubePen.fillText(timeLabel.getText(), 45.0*cubeCanvas.getWidth()/100.0, 19.25*cubeCanvas.getHeight()/20.0); //MIGHT NEED TO DO SOMETHING TO MAKE DISPLAY 3 DECIMAL POINTS
