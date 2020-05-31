@@ -12,7 +12,7 @@ To those who actually know how to code and have a lot of experience with it, I j
 
 ## How to Use
 
-![Main Menu](TwoSidePLLPractice/images/Main Menu.PNG)
+![Main Menu](https://github.com/jackdeath5/TwoSidePLLPractice/blob/master/TwoSidePLLPractice/images/Main%20Menu.PNG)
 
 So this is the main menu. This is what you open up to when you run the application. You can select what you want to do from here. You can select the mode, choose you cross color, choose the difficulty, set how many cases you want to be tested on, and what colors you want your cube to be.
 
@@ -31,7 +31,8 @@ This number is the number of cases you can set for a single quiz session. Right 
 Cube colors are RGB values, and can be switched individually by changing their indiviudal RGB values. Changing the values here will not only be changed when testing, but will also be changed for the cubes when look in the *Select Cases* menu and when you go into debug. You can load colors from a file and save them to a file. **If you want to update the cube colors for a saved session file (more on this later), replace the file. It will change the cube colors in that file, and keep all of the session data intact.**
 
 ### Case Selection
-![Case Selection 1](TwoSidePLLPractice/images/Case Seletion 1.PNG) ![Case Selection 2](TwoSidePLLPractice/images/Case Seletion 2.PNG)
+![Case Selection 1](https://github.com/jackdeath5/TwoSidePLLPractice/blob/master/TwoSidePLLPractice/images/Case%20Seletion%201.PNG) ![Case Selection 2](https://github.com/jackdeath5/TwoSidePLLPractice/blob/master/TwoSidePLLPractice/images/Case%20Selection%202.PNG)
+
 This menu is the one you are brought to when click *Select Cases* on the main menu. In this menu, you can select which cases you want to be tested on. Each item seen inside the scrolling area is a dropdown that shows the 4 different ways each PLL case can be setup. You can uncheck the boxes for the cases you do **not** want to see in the tests. These cases will stay the same for both difficulties. In addition, there is also presets that can be set. I set the presets based on the categories made in [Sarah's Cubing Site](https://sarah.cubing.net/3x3x3/pll-recognition-guide). I am not affiliated with that website- it's just the place I learend my two side pll recognition. And I think it's a good way of organizing them. So, I used those groups for presets. Credit goes to that website for the grouping though. The preset checkboxes work like this: checking them off will turn all the cases for that specific preset off while checking it on will turn on all the cases for that specific preset. Cases can be modified manually outside of setting them. You can also select all and select none to be highlighted at once. The colors of the cubes are consistent throughout all of the cases. The colors match thosein the main menu, and the cubes abide by the cross color set in the main menu as well.
 
 ### Session Statistics
