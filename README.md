@@ -59,14 +59,14 @@ In order to run this, you **MUST** have Java 8. Most of you might already have i
 ### .jar File
 This file should work for most people who have Java 8 installed. I have been able to test run it on a few different computers with Java 8 and it has ran fine. For computers with later and/or multiple versions of Java installed, I can't say if it will work or not. Check troubleshooting if you run into problems with this.
 
-[Download TwoSidePLLPractice.jar](LINK)
+[Download TwoSidePLLPractice.jar](https://github.com/jackdeath5/TwoSidePLLPractice/raw/master/TwoSidePLLPractice/Downloads/TwoSidePLLPractice.jar)
 
 ### Windows
 I'm going to try and be as transparent as I need to be with this, because I know downloading .exe files can be kind of sketchy and might trigger some anti-virus software. For one, I made the Java Code open source so that if you want to, you can take a look at it. Why does this matter? I literally just took the .jar file, and basically threw it into [launch4j](http://launch4j.sourceforge.net/) to get the .exe file. Then, I signed it to stop anti-virus checks for that. That's it. No other modification or anything done to the file. If you're still super skeptical of a virus for whatever reason, message me on Discord (mentioned below) we can discuss it there.
 
 **I did this to try and address the problems with multiple Java versions on a Windows computer. If for some reason on Windows the .jar file doesn't do anything when you try and open it, try downloading and running this .exe file instead.**
 
-[Download TwoSidePLLPractice.exe](LINK)
+[Download TwoSidePLLPractice.exe](https://github.com/jackdeath5/TwoSidePLLPractice/raw/master/TwoSidePLLPractice/Downloads/TwoSidePLLPractice.exe)
 
 ### Mac
 I'll be honest- I don't have a Macbook and neither do any of my close friends, so I apologize that I haven't been able to test it on Macs. Try making sure you have Java 8 downloaded and **running the .jar version**. If that doesn't work for some reason, maybe someone with some knowledge about potential fixes or ways to make it work can reach out to me on Discord or something and we can discuss potential fixes.
