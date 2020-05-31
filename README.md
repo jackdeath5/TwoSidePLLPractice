@@ -91,7 +91,7 @@ I'm going to try and be as transparent as I need to be with this, because I know
 [Download TwoSidePLLPractice.exe](https://github.com/jackdeath5/TwoSidePLLPractice/raw/master/TwoSidePLLPractice/Downloads/TwoSidePLLPractice.exe)
 
 ### Mac
-I'll be honest- I don't have a Macbook and neither do any of my close friends, so I apologize that I haven't been able to test it on Macs. Try making sure you have Java 8 downloaded and **running the .jar version**. If that doesn't work for some reason, maybe someone with some knowledge about potential fixes or ways to make it work can reach out to me on Discord or something and we can discuss potential fixes.
+To run on a Macbook, use the **.jar** version. If you have Java 8 downloaded and working, it should run. If you have later versions of Java installed, you may need to jump through a few hoops to make sure running the app uses Java 8. I'm no expert on this, but I know that it will work if Java 8 is working properly. I am aware of a bug with the text for the presets being weird in the Cases Select menu. I will get to it.
 
 ### Linux
 I'll be honest- I don't use Linux, and neither do any of my close friends, so I apologize that I haven't been able to test it on Linux. Try making sure you have Java 8 downloaded and **running the .jar version**. If that doesn't work for some reason, maybe someone with some knowledge about potential fixes or ways to make it work can reach out to me on Discord or something and we can discuss potential fixes.
