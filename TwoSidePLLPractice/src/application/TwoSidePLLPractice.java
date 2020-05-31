@@ -737,7 +737,7 @@ public class TwoSidePLLPractice extends Application{
 		//Title
 		Label title = new Label("2-Side PLL Recognition Practice");
 		title.setFont(Font.font("Verdana", FontWeight.BOLD, 18)); //Makes the font bigger and bolded
-		Label author = new Label("Created by JackDeath5");
+		Label author = new Label("Created by Jack Lanois");
 		author.setFont(Font.font("Verdana", FontPosture.ITALIC, 11)); //make the text small and italicized
 		VBox titleBox = new VBox(title, author, new Label()); //Empty label used as a simple spacer
 		titleBox.setAlignment(Pos.CENTER); //Center things in the titlebox
