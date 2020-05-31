@@ -13,7 +13,7 @@ To those who actually know how to code and have a lot of experience with it, I j
 ## How to Use
 
 ### Main Menu
-![Main Menu](https://github.com/jackdeath5/TwoSidePLLPractice/blob/master/TwoSidePLLPractice/images/Main%20Menu.PNG)
+![Main Menu]()
 
 So this is the main menu. This is what you open up to when you run the application. You can select what you want to do from here. You can select the mode, choose you cross color, choose the difficulty, set how many cases you want to be tested on, and what colors you want your cube to be.
 
