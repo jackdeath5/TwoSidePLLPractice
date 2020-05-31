@@ -10,6 +10,28 @@ Practicing it though, is a completely different story. Sure, there's some **free
 ### Sidenote
 To those who actually know how to code and have a lot of experience with it, I just want you to know that I coded the bulk of this before starting college, and so I didn't javadoc everything like I should have. Coming back to this to add a few more things after a year in college, I'm now regretting it. I'm sorry, but I learned to code by throwing in a bunch of comments to describe things going on in the code instead of Javadocing everything. I'll try to add the Javadoc as time goes on, I just decided to post this to get it out to people because my schedule is about to get a bit more busy. So, I apologize to anybody attempting to do this early on after the initial posting about the mountain of comments and code they'll need to go through to understand what's going on.
 
+## Table of Contents
+- [How to use](#how-to-use)
+  * [Main Menu](#main-menu)
+    + [Mode](#mode)
+    + [Cross Color](#cross-color)
+    + [Difficulty](#difficulty)
+    + [Number of Cases](#number-of-cases)
+    + [Cube Colors](#cube-colors)
+  * [Case Selection](#case-selection)
+  * [Testing](#testing)
+  * [Results Screen](#results-screen)
+- [Downloads](#downloads)
+  * [.jar File](#jar-file)
+  * [Windows](#windows)
+  * [Mac](#mac)
+  * [Linux](#linux)
+  * [Troubleshooting](#troubleshooting)
+- [Final Notes](#final-notes)
+  * [Discord](#discord)
+  * [The Code*](#the-code----people-looking-to-play-with-the-code-should-read-this)
+  * [Improvements](#improvementssuggestions)
+
 ## How to Use
 
 ### Main Menu
