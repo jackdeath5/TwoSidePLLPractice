@@ -13,7 +13,7 @@ import javafx.geometry.Pos;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Popup;
-import javafx.stage.PopupWindow;
+//import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -22,14 +22,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.CustomMenuItem;
+//import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
+//import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -37,8 +37,8 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
+//import javafx.scene.input.KeyCodeCombination;
+//import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -64,7 +64,15 @@ import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
 
-//Commented out imports were done so because they weren't used
+//Commented out imports that ended up not being used
+
+/*Changes between this and Java 8 release version:
+ * STRING.strip() methods are changed to STRING.trim()
+ * STRING.isBlank() methods are changed to STRING.trim().isEmpty()
+ * Added 10 to simpleGP and fullGP size due to a gap made from switching from java11 to java 8
+ * ALSO NOTE: the weird initial aligning of the first table shown since running the program in Session Stats is a bug in Java 8 FX. Not my fault
+   and not sure how to fix.
+*/
 
 public class TwoSidePLLPractice extends Application{
 
@@ -699,7 +707,7 @@ public class TwoSidePLLPractice extends Application{
 			if(!new_val.matches("\\d*")) {countBox.setText(new_val.replaceAll("[^\\d]", "")); new_val = countBox.getText();} //Gets Rid of Non-Numerical Characters
 			if(new_val.isEmpty()) {countBox.setText("0"); new_val = "0";} //WILL SET TO 0  IF NOTHING IS IN THE BOX
 			if(new_val.length() > 3) {countBox.setText(countBox.getText().substring(0, 3));} //to keep number at 3 digits MAX
-			if(Integer.parseInt(new_val) > 100) {countBox.setText("100");}//{new_val = "100";} //Sets the text field to 100 if number input is larger than that
+			if(Integer.parseInt(new_val) > 999) {countBox.setText("999");}//{new_val = "100";} //Sets the text field to 100 if number input is larger than that
 			if(new_val.charAt(0) == '0' && new_val.length() >= 2) {countBox.setText(countBox.getText().substring(1, new_val.length()));}
 		});
 		countBox.setPrefWidth(40);
@@ -2346,7 +2354,7 @@ public class TwoSidePLLPractice extends Application{
 //		double timerSize = 75*scale; //MODIFY THIS TO CHANGE THE SIZE OF THE TIMER //DEPRECATED
 		cubePen.setFill(Color.WHITE);
 //        cubePen.fillRect(40.0*cubeCanvas.getWidth()/100.0, 18.0*cubeCanvas.getHeight()/20.0, timerSize, 2.0*cubeCanvas.getHeight()/20.0); //DEPRECATED
-        cubePen.fillRect(0.0, 18.0*cubeCanvas.getHeight()/20.0, cubeCanvas.getWidth(), 2.0*cubeCanvas.getHeight()/20.0); //Fixed. Now should cover all values
+        cubePen.fillRect(0.0, 18.0*cubeCanvas.getHeight()/20.0, cubeCanvas.getWidth()-45, 2.0*cubeCanvas.getHeight()/20.0); //Fixed. Now should cover all values
         cubePen.setFill(Color.BLACK);
         cubePen.setFont(new Font(18.0*scale)); //test font size at 18
         cubePen.fillText(timeLabel.getText(), 45.0*cubeCanvas.getWidth()/100.0, 19.25*cubeCanvas.getHeight()/20.0); //MIGHT NEED TO DO SOMETHING TO MAKE DISPLAY 3 DECIMAL POINTS
