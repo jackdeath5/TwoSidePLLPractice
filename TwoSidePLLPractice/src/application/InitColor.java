@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class InitColor extends HBox {
 
@@ -22,6 +23,7 @@ public class InitColor extends HBox {
 
 		public InitColor(String name, int r, int g, int b) {
 			nameLabel = new Label(name + " Face:"); //Set name of label, with a space between it and the next part
+			nameLabel.setFont(new Font("Segoe UI", 12));
 			nameLabel.setMinWidth(75);
 			colorDisp = new Canvas(25,25); //Used to display the colors
 			disPen = colorDisp.getGraphicsContext2D();

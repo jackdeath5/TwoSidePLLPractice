@@ -363,6 +363,8 @@ public class TwoSidePLLPractice extends Application{
     private ErrorMessagePopup popupMessage;
     
     private Stage primary;
+    
+    private Font plainText;
 
 	//Constructor
 	public TwoSidePLLPractice() {
@@ -1546,6 +1548,8 @@ public class TwoSidePLLPractice extends Application{
 	    	}
 
 	    });
+	    
+	    plainText = new Font("Segoe UI", 12);
 
 	}
 
@@ -1927,6 +1931,7 @@ public class TwoSidePLLPractice extends Application{
 
 		//Select all button
 		Button allButton = new Button("Select All");
+		allButton.setFont(plainText);
 		allButton.setOnAction( e -> {
 			for(SetCaseBox c: caseSelectArray) {c.setSelected(true);} //Sets everything to be selected
 			epll.setSelected(true); //Sets all presets to on
@@ -1940,6 +1945,7 @@ public class TwoSidePLLPractice extends Application{
 
 		//Select None button
 		Button noneButton = new Button("Select None");
+		noneButton.setFont(plainText);
 		noneButton.setOnAction( e -> {
 			for(SetCaseBox c: caseSelectArray) {c.setSelected(false);} //Sets everything to be unselected
 			epll.setSelected(false); //Sets all presets to off
@@ -2020,6 +2026,7 @@ public class TwoSidePLLPractice extends Application{
 		legendPopup.getContent().add(legendVbox);
 		
 		Button presetsKey = new Button("Legend");
+		presetsKey.setFont(plainText);
 		presetsKey.setOnAction(e -> {
 			legendPopup.setAnchorX(primary.getX() + 53);
 			legendPopup.setAnchorY(primary.getY() + 20);
@@ -3367,6 +3374,7 @@ public class TwoSidePLLPractice extends Application{
 			super(preset);
 			this.cases = cases;
 			this.setSelected(true); //is selected by default
+			this.setFont(plainText);
 			
 			this.setOnAction(e -> {
 //				System.out.println(preset + " is checked? " + this.isSelected());
