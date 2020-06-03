@@ -22,7 +22,7 @@ To those who actually know how to code and have a lot of experience with it, I j
   * [Testing](#testing)
   * [Results Screen](#results-screen)
 - [Downloads](#downloads)
-  * [Jar File (General Download)](#jar-file)
+  * [Jar File (General Download)](#jar-file-general-download)
   * [Windows](#windows)
   * [Mac](#mac)
   * [Linux](#linux)
