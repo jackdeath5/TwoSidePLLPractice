@@ -22,7 +22,7 @@ To those who actually know how to code and have a lot of experience with it, I j
   * [Testing](#testing)
   * [Results Screen](#results-screen)
 - [Downloads](#downloads)
-  * [.jar File](#jar-file)
+  * [Jar File (General Download)](#jar-file)
   * [Windows](#windows)
   * [Mac](#mac)
   * [Linux](#linux)
@@ -78,7 +78,7 @@ This is the screen that comes up after you finish a test. It will only show the 
 ## Downloads
 In order to run this, you **MUST** have Java 8. Most of you might already have it, since it's the first thing that comes up when you Google something like "java download". But for those who don't, you can get it [here](https://www.java.com/en/download/). There will be a few downloads (hopefully most people can run at least one), including the runnable .jar file and a runnable .exe file for Windows people who may choose to do that instead or might be having issues running the .jar file.
 
-### .jar File
+### Jar File (General Download)
 This file should work for most people who have Java 8 installed. I have been able to test run it on a few different computers with Java 8 and it has ran fine. For computers with later and/or multiple versions of Java installed, I can't say if it will work or not. Check troubleshooting if you run into problems with this.
 
 [Download TwoSidePLLPractice.jar](https://github.com/jackdeath5/TwoSidePLLPractice/raw/master/TwoSidePLLPractice/Downloads/TwoSidePLLPractice.jar)
@@ -91,7 +91,7 @@ I'm going to try and be as transparent as I need to be with this, because I know
 [Download TwoSidePLLPractice.exe](https://github.com/jackdeath5/TwoSidePLLPractice/raw/master/TwoSidePLLPractice/Downloads/TwoSidePLLPractice.exe)
 
 ### Mac
-To run on a Macbook, use the **.jar** version. If you have Java 8 downloaded and working, it should run. If you have later versions of Java installed, you may need to jump through a few hoops to make sure running the app uses Java 8. I'm no expert on this, but I know that it will work if Java 8 is working properly. I am aware of a bug with the text for the presets being weird in the Cases Select menu. I'm trying to look into it.
+To run on a Macbook, use the **Jar** version. If you have Java 8 downloaded and working, it should run. If you have later versions of Java installed, you may need to jump through a few hoops to make sure running the app uses Java 8. I'm no expert on this, but I know that it will work if Java 8 is working properly.
 
 ### Linux
 I'll be honest- I don't use Linux, and neither do any of my close friends, so I apologize that I haven't been able to test it on Linux. Try making sure you have Java 8 downloaded and **running the .jar version**. If that doesn't work for some reason, maybe someone with some knowledge about potential fixes or ways to make it work can reach out to me on Discord or something and we can discuss potential fixes.
