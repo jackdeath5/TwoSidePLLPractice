@@ -9,21 +9,48 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
+/**
+ * Custom menu used in the debug menu for easily messing with/changing the colors of the cube. The ColorMenu expands into 
+ * 4 Menu items, one for R, G, B, and the color display. A ColorMenu is created for each of the cube colors and is used to 
+ * change the color in debug mode. Each color item consists of a Colorlabel, matching the color value for the R, G, or B value 
+ * that is set in either the Slider it also has, or the Textfield which is to the right of the slider. The TextField and Slider 
+ * values are linked, meaning that changing the value on one of them would update the value on the other to the same value as 
+ * well.
+ * @author Jack Lanois
+ */
 public class ColorMenu extends Menu {
 
+		/** The Slider representing the Red value for the ColorMenu.**/
 		private Slider redSlider;
+		/** The TextField representing the Red value for the ColorMenu.**/
 		private TextField redtf;
+		/** The Slider representing the Green value for the ColorMenu.**/
 	    private Slider greenSlider;
+	    /** The TextField representing the Green value for the ColorMenu.**/
 	    private TextField greentf;
+	    /** The Slider representing the Blue value for the ColorMenu.**/
 	    private Slider blueSlider;
+	    /** The TextField representing the Blue value for the ColorMenu.**/
 	    private TextField bluetf;
+	    /** The Canvas used to display the color of the combined RGB values of the sliders.**/
 	    private Canvas colorDisp;
+	    /** The GraphicsContext used on the colorDisp Canvas to draw the box to show the combined RGB color.**/
 	    private GraphicsContext disPen;
+	    /** The HBox that all of the elements for the red value (Label, Slider, TextField) are put in.**/
 	    private HBox redbox;
+	    /** The HBox that all of the elements for the green value (Label, Slider, TextField) are put in.**/
 	    private HBox greenbox;
+	    /** The HBox that all of the elements for the blue value (Label, Slider, TextField) are put in.**/
 	    private HBox bluebox;
 
 		//Will Create the color choosing menu items in Debug mode
+	    /**
+	     * Constructor for creating the ColorMenu with the specified RGB values as its default color.
+	     * @param name The name for the Menu.
+	     * @param r Int that's between 0 and 255 representing the red (R) value of the color.
+		 * @param g Int that's between 0 and 255 representing the green (G) value of the color.
+		 * @param b Int that's between 0 and 255 representing the blue (B) value of the color.
+	     */
 		public ColorMenu(String name, int r, int g, int b) {
 
 			super(name);
@@ -129,10 +156,20 @@ public class ColorMenu extends Menu {
 		} //END OF CONSTRUCTOR
 
 		//Gets the Color of the sliders
+		/**
+		 * Gets the color of the combined RBG values in the ColorMenu.
+		 * @return Color with RGB components matching from the different menus in the ColorMenu.
+		 */
 		public Color getColor() {
 			return Color.rgb((int) redSlider.getValue(),(int) greenSlider.getValue(),(int) blueSlider.getValue());
 		}
-
+		
+		/**
+		 * Method to set the overall color of the ColorMenu to the specified arguments.
+		 * @param r Int that's between 0 and 255 representing the red (R) value of the color.
+		 * @param g Int that's between 0 and 255 representing the green (G) value of the color.
+		 * @param b Int that's between 0 and 255 representing the blue (B) value of the color.
+		 */
 		public void setColor(int r, int g, int b) {
 			redSlider.setValue(r);
 			greenSlider.setValue(g);
