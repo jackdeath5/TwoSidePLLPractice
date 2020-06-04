@@ -2409,7 +2409,7 @@ public class TwoSidePLLPractice extends Application{
 		Drawable[] cubeParts;
 		double canvasSize = casePen.getCanvas().getWidth(); //Assumes the canvas is a square
 
-		//Initial Location
+		//Initial Location -- THE BOTTOMMOST MIDDLE CORNER IS THE POSITION USED FOR THE SIDES
 		double XPos = canvasSize/2.0;
 		double YPos = 3*canvasSize/4.0;
 		double sideLength = canvasSize/7.0;

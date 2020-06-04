@@ -9,18 +9,43 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
+/**
+ * This class creates an HBox with everything needed to setup a color. These are the color selecting sections on the 
+ * main menu. In the HBox exists the "____ Face: " label, the color square, followed by a set of 3 ColorLables each 
+ * paired with a TextField for the RGB of the color that is displayed in the ColorSquare. In the main file, TwoSidePLLPractice, 
+ * InitColors are used to make set the individual colors of the cube. Changing one of them will change that change that color 
+ * for that face whenever a cube is drawn.
+ * @author Jack Lanois
+ */
 public class InitColor extends HBox {
 
+		/** The general name of the color of the face. "Face:" is added onto it.**/
 		private Label nameLabel;
+		/** The TextField representing the Red (R) value for the object.**/
 		private TextField redtf;
+		/** The ColorLabel paired with redtf that changes hues to reflect the Red (R) value in redtf.**/
 		private ColorLabel redLabel;
+		/** The TextField representing the Green (G) value for the object.**/
 		private TextField greentf;
+		/** The ColorLabel paired with greentf that changes hues to reflect the Green (G) value in greentf.**/
 		private ColorLabel greenLabel;
+		/** The TextField representing the Blue (B) value for the object.**/
 		private TextField bluetf;
+		/** The ColorLabel paired with bluetf that changes hues to reflect the Blue (B) value in bluetf.**/
 		private ColorLabel blueLabel;
+		/** The Canvas used to display the color of the combined RGB values from the RGB TextFields.**/
 		private Canvas colorDisp;
+		/** The GraphicsContext used to draw on the Canvas to display the color of the combined RGB values.**/
 		private GraphicsContext disPen;
 
+		/**
+		 * Constructor for InitColor. It creates a object which is an HBox containing a "<SPECIFIED> Face: " label, the color square, 
+		 * followed by a set of 3 ColorLables each paired with a TextField for the RGB of the color that is displayed in the ColorSquare.
+		 * @param name String input for the name of the face color. " Face:" will be added after it automatically.
+		 * @param r Int that's between 0 and 255 representing the red (R) value of the default color.
+		 * @param g Int that's between 0 and 255 representing the green (G) value of the default color.
+		 * @param b Int that's between 0 and 255 representing the blue (B) value of the default color.
+		 */
 		public InitColor(String name, int r, int g, int b) {
 			nameLabel = new Label(name + " Face:"); //Set name of label, with a space between it and the next part
 			nameLabel.setFont(new Font("Segoe UI", 12));
@@ -90,14 +115,38 @@ public class InitColor extends HBox {
 			super.getChildren().addAll(nameLabel,colorDisp,new Label("  "),redLabel,redtf,greenLabel,greentf,blueLabel,bluetf);
 		} //End of constructor
 
+		/**
+		 * Gets the color of the combined RGB values from values within the TextFields, which is also the same color 
+		 * shown in the color box.
+		 * @return Color from the RGB values from the TextFields.
+		 */
 		public Color getColor() {
 			return Color.rgb(Integer.parseInt(redtf.getText()),Integer.parseInt(greentf.getText()),Integer.parseInt(bluetf.getText()));
 		}
 
+		/**
+		 * Returns the value in the Red (R) TextField (redtf).
+		 * @return Int of the value in the Red (R) TextField.
+		 */
 		public int getRedInt() {return Integer.parseInt(redtf.getText());}
+		/**
+		 * Returns the value in the Green (G) TextField (greentf).
+		 * @return Int of the value in the Green (G) TextField.
+		 */
 		public int getGreenInt() {return Integer.parseInt(greentf.getText());}
+		/**
+		 * Returns the value in the Blue (B) TextField (bluetf).
+		 * @return Int of the value in the Blue (B) TextField.
+		 */
 		public int getBlueInt() {return Integer.parseInt(bluetf.getText());}
 		
+		/**
+		 * Method used to set the color of the InitColor to an entirely different one, as specified by the 
+		 * input RGB values.
+		 * @param red Int that's between 0 and 255 representing the red (R) value of the default color.
+		 * @param green Int that's between 0 and 255 representing the green (G) value of the default color.
+		 * @param blue Int that's between 0 and 255 representing the blue (B) value of the default color.
+		 */
 		public void setColor(int red, int green, int blue) {
 			if(red > 255 || green > 255 || blue > 255) {
 				throw new IllegalArgumentException("Colors cannot be greater than 255");

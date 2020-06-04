@@ -17,12 +17,26 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.CornerRadii;
 
+/**
+ * This class is used a simple, reusable error message for the purpose of displaying short errors. It is currently 
+ * utilized for displaying the errors that arise from FileIO. The .show() method is used to display the message on 
+ * the same Stage with a new customized message each time.
+ * @author Jack Lanois
+ */
 public class ErrorMessagePopup extends Popup /*PopupWindow*/ {
 	
+	/** The Stage the pop-up is a part of.**/
 	private Stage stage;
+	/** The label used as the message given for the pop-up.**/
 	private Label errorLabel;
+	/** The borderpane used as the base object to put all of the elements onto.**/
 	private BorderPane bp;
 	
+	/**
+	 * Constructs an error message for the particular Stage/window. By setting it here, it 
+	 * does not need to be changed later on and the pop-up can be reused.
+	 * @param stage The Stage for the window that the pop-up will be a part of.
+	 */
 	public ErrorMessagePopup(Stage stage) {
 		super();
 		this.stage = stage;
@@ -56,6 +70,12 @@ public class ErrorMessagePopup extends Popup /*PopupWindow*/ {
 //		this.setScene(new Scene(bp,30,30));
 	}
 	
+	/**
+	 * This method is used to show the pop-up with a new message. The pop-up stays part of the same stage, so it is 
+	 * part of the same window, and by using this method, you can reuse the pop-up because the message it has can 
+	 * be set differently.
+	 * @param message String for the message to be displayed on the pop-up.
+	 */
 	public void show(String message) {
 		//Positioning
 //		System.out.println(this.getWidth() + " - " + this.getHeight());
@@ -70,10 +90,18 @@ public class ErrorMessagePopup extends Popup /*PopupWindow*/ {
 	}
 	
 	//Same thing as the previous show, but has a custom input X and Y value
+	/**
+	 * This method is used to show the pop-up with a new message. The pop-up stays part of the same stage, so it is 
+	 * part of the same window, and by using this method, you can reuse the pop-up because the message it has can 
+	 * be set differently. Difference with this method is that you can specify where the method appears.
+	 * @param message String for the message to be displayed on the pop-up.
+	 * @param x Double for the X coordinate of pop-up on the window.
+	 * @param y Double for the y coordinate of pop-up on the window.
+	 */
 	public void show(String message, double x, double y) {
 		//Positioning
-		this.setAnchorX(x);
-		this.setAnchorY(y);
+		this.setAnchorX(stage.getX() + x);
+		this.setAnchorY(stage.getY() + y);
 		errorLabel.setText(message);
 		super.show(stage);
 	}
