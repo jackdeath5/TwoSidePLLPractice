@@ -6,47 +6,45 @@ import javafx.scene.paint.Color;
 //These will be the two 2x3 blocks at the bottom of the cube -- the solved first 2 layers.
 /**
  * This class is used to isometrically draw the side 2x3 blocks on the cube drawings. It implements Drawable 
- * so it can be added to an ArrayList with the other parts of the cube so that all of the 
- * different parts of a cube can be drawn through a simple execution.
+ * so it can be added to an ArrayList with the other parts of the cube so that all of the  different parts 
+ * of a cube can be drawn through a simple execution. It is one of the 3 classes used to create a cube drawing.
  * @author Jack Lanois
  */
 public class Side implements Drawable {
 
-	/** The X position of the bottommost middle corner of the cube.**/
+	/** The X position of the bottommost middle corner of the cube.*/
 	private final double x;
-	/** The Y position of the bottommost middle corner of the cube.**/
+	/** The Y position of the bottommost middle corner of the cube.*/
 	private final double y;
-	/** The total lenght of the side of side, as measured along the side of the cube. (Diagonally to 
+	/** The total length of the side, as measured along the side of the cube. (Diagonally to 
 	 * match the angle of the side) Can be negative, which would indicate the side is being drawn to 
-	 * the left instead of to the right.
-	 */
+	 * the left instead of to the right.*/
 	private final double l;
-	/** The Color of all of the squares on the side.**/
+	/** The Color of all of the squares on the side.*/
 	Color color;
-	
 	/** This is the X value of the bottom right part of where top side square over the 
-	 * first column of side squares would be. It is public so that a different class can 
-	 * use this to draw the square.*/
+	 * first column of side squares would be. It is public so that different classes 
+	 * (most notable of which is SideSquare) can use this to draw the square.*/
 	public double topX1;
 	/** This is the Y value of the bottom right part of where top side square over the 
-	 * first column of side squares would be. It is public so that a different class can 
-	 * use this to draw the square.*/
+	 * first column of side squares would be. It is public so that different classes 
+	 * (most notable of which is SideSquare) can use this to draw the square.*/
 	public double topY1;
 	/** This is the X value of the bottom right part of where top side square over the 
-	 * second column of side squares would be. It is public so that a different class can 
-	 * use this to draw the square.*/
+	 * second column of side squares would be. It is public so that different classes 
+	 * (most notable of which is SideSquare) can use this to draw the square.*/
 	public double topX2;
 	/** This is the Y value of the bottom right part of where top side square over the 
-	 * second column of side squares would be. It is public so that a different class can 
-	 * use this to draw the square.*/
+	 * second column of side squares would be. It is public so that different classes 
+	 * (most notable of which is SideSquare) can use this to draw the square.*/
 	public double topY2;
 	/** This is the X value of the bottom right part of where top side square over the 
-	 * third column of side squares would be. It is public so that a different class can 
-	 * use this to draw the square.*/
+	 * third column of side squares would be. It is public so that different classes 
+	 * (most notable of which is SideSquare) can use this to draw the square.*/
 	public double topX3;
 	/** This is the Y value of the bottom right part of where top side square over the 
-	 * third column of side squares would be. It is public so that a different class can 
-	 * use this to draw the square.*/
+	 * third column of side squares would be. It is public so that different classes 
+	 * (most notable of which is SideSquare) can use this to draw the square.*/
 	public double topY3;
 
 
@@ -104,7 +102,7 @@ public class Side implements Drawable {
 
 	/**
 	 * This method is implemented from Drawable, and is used to set the Color of the 
-	 * squares on the side. Side will need to be redrawn in order for the colors to show.
+	 * squares on the side. Side will need to be redrawn in order for the new colors to show.
 	 */
 	public void setColor(Color newColor) {
 		this.color = newColor;
@@ -114,6 +112,7 @@ public class Side implements Drawable {
 	 * This is a method implemented by the Drawable, and is used to draw the Side 
 	 * using the specified GraphicsContext. The Canvas it will be drawn on is the 
 	 * one that the GraphicsContext is used for.
+	 * @param g The GraphicsContext used to draw the Side.
 	 */
 	public void draw(GraphicsContext g) {
 		g.setFill(color);
